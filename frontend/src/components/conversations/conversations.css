@@ -1,0 +1,255 @@
+/* Conversation item - Enhanced style */
+.conversation {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0;
+    padding: 12px 8px;
+    border-radius: 12px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    background: transparent;
+    border: none;
+}
+
+.conversation:hover {
+    background: #f2f3f5;
+    transform: translateY(-1px);
+}
+
+.conversation:active {
+    background: #e4e6eb;
+    transform: translateY(0);
+}
+
+.conversation.hasUnread {
+    background: rgba(0, 132, 255, 0.02);
+    border-left: 3px solid #0084ff;
+}
+
+/* Profile image container */
+.conversationImgContainer {
+    position: relative;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+/* Profile image - Enhanced style */
+.conversationImg {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.conversation:hover .conversationImg {
+    border-color: rgba(0, 132, 255, 0.2);
+}
+
+/* Online badge - Enhanced style */
+.conversationOnlineBadge {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+    background: #31a24c;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Unread badge */
+.conversationUnreadBadge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #ff3040;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 12px;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Conversation content */
+.conversationContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    gap: 4px;
+}
+
+/* Conversation header */
+.conversationHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Username styling - Enhanced */
+.conversationName {
+    font-weight: 500;
+    font-size: 15px;
+    color: #050505;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+.conversation.hasUnread .conversationName {
+    font-weight: 600;
+    color: #0084ff;
+}
+
+/* Time text */
+.conversationTime {
+    font-size: 12px;
+    color: #65676b;
+    font-weight: 400;
+    flex-shrink: 0;
+}
+
+.conversation.hasUnread .conversationTime {
+    color: #0084ff;
+    font-weight: 500;
+}
+
+/* Conversation footer */
+.conversationFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Last message text */
+.conversationLastMessage {
+    font-size: 13px;
+    color: #65676b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+.conversationLastMessage.unread {
+    color: #050505;
+    font-weight: 500;
+}
+
+/* Conversation indicators */
+.conversationIndicators {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.onlineIndicator {
+    width: 8px;
+    height: 8px;
+    background: #31a24c;
+    border-radius: 50%;
+}
+
+/* Active conversation state - Lite */
+.conversation.active {
+    background: #e7f3ff;
+}
+
+.conversation.active .conversationName {
+    color: #0084ff;
+    font-weight: 600;
+}
+
+/* Online indicator - removed for cleaner look */
+
+/* Conversation list container - Lite */
+.conversationsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 4px;
+    min-height: 0;
+}
+
+/* Custom scrollbar - Lite */
+.conversationsContainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+.conversationsContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.conversationsContainer::-webkit-scrollbar-thumb {
+    background: #bcc0c4;
+    border-radius: 3px;
+}
+
+.conversationsContainer::-webkit-scrollbar-thumb:hover {
+    background: #8a8d91;
+}
+
+/* No search results message */
+.noSearchResults {
+    padding: 20px;
+    text-align: center;
+    color: #65676b;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* Skeleton loading styles */
+.skeleton {
+    background: linear-gradient(90deg, #f0f2f5 25%, #e4e6eb 50%, #f0f2f5 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.conversationImg.skeleton {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+}
+
+.conversationName.skeleton {
+    height: 16px;
+    width: 120px;
+    margin-bottom: 8px;
+}
+
+.conversationTime.skeleton {
+    height: 12px;
+    width: 50px;
+}
+
+.conversationLastMessage.skeleton {
+    height: 14px;
+    width: 180px;
+}

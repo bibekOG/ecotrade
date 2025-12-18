@@ -1,0 +1,180 @@
+/* Message container - Lite style */
+.message {
+    display: flex;
+    flex-direction: column;
+    margin: 8px 0;
+    align-items: flex-start;
+}
+
+.message.own {
+    align-items: flex-end;
+}
+
+/* Message content layout - Lite */
+.messageTop {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    max-width: 75%;
+}
+
+/* Received messages: avatar left, bubble right */
+.message .messageTop {
+    flex-direction: row;
+}
+
+/* Sent messages: avatar right, bubble left */
+.message.own .messageTop {
+    flex-direction: row-reverse;
+}
+
+/* Profile image - Lite style */
+.messageImg {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: none;
+    flex-shrink: 0;
+}
+
+/* Message bubble container */
+.messageBubble {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 100%;
+}
+
+/* Message text - Lite style */
+.messageText {
+    position: relative;
+    color: #050505;
+    background: #f0f2f5;
+    border-radius: 18px;
+    padding: 8px 12px;
+    max-width: 400px;
+    line-height: 1.38;
+    font-size: 15px;
+    box-shadow: none;
+    border: none;
+    word-wrap: break-word;
+}
+
+/* Own message styling - Lite */
+.message.own .messageText {
+    background: #0084ff;
+    color: #ffffff;
+}
+
+/* Timestamp styling - Lite */
+.messageBottom {
+    font-size: 11px;
+    margin-top: 4px;
+    color: #65676b;
+    font-weight: 400;
+    padding: 0 6px;
+}
+
+.message.own .messageBottom {
+    text-align: right;
+}
+
+/* Attached image - Lite style */
+.messageAttachedImage {
+    max-width: 300px;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+    cursor: pointer;
+    border: none;
+    object-fit: contain;
+    background: #f0f2f5;
+}
+
+.messageImageLink {
+    display: inline-block;
+    margin-bottom: 4px;
+}
+
+.message.own .messageAttachedImage {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Removed duplicate styles - handled in messenger.css */
+
+/* Typing indicator - Lite style */
+@keyframes typing {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-6px);
+    }
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 10px 12px;
+    background: #f0f2f5;
+    border-radius: 18px;
+    margin: 6px 0;
+}
+
+.typing-indicator span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #65676b;
+    animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Message delivery status - Lite */
+.messageStatus {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    margin-top: 2px;
+    font-size: 10px;
+    color: #65676b;
+}
+
+.message.own .messageStatus {
+    margin-right: 6px;
+}
+
+/* Responsive design for messages - Lite */
+@media (max-width: 768px) {
+    .messageTop {
+        max-width: 90%;
+    }
+    
+    .messageText {
+        max-width: 260px;
+        padding: 8px 12px;
+        font-size: 15px;
+    }
+    
+    .messageAttachedImage {
+        max-width: 200px;
+        max-height: 200px;
+    }
+    
+    .messageImg {
+        width: 24px;
+        height: 24px;
+    }
+}

@@ -1,0 +1,416 @@
+/* Call Container */
+.callContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000;
+}
+
+.callOverlay {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(20, 20, 30, 0.95));
+    backdrop-filter: blur(20px);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.callModal {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    min-width: 400px;
+    max-width: 800px;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Call Header */
+.callHeader {
+    padding: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.callUserInfo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.callAvatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.callUserDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.callUsername {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.callStatus {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.callTime {
+    color: #4CAF50;
+    font-weight: 500;
+    font-family: 'Courier New', monospace;
+}
+
+.callType {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Video Container */
+.videoContainer {
+    flex: 1;
+    position: relative;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remoteVideoWrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remoteVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.videoPlaceholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.videoPlaceholderAvatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.localVideoWrapper {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 200px;
+    height: 150px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    background: #333;
+}
+
+.localVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1); /* Mirror effect */
+}
+
+.localVideo.videoDisabled {
+    opacity: 0;
+}
+
+.videoDisabledOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.videoDisabledAvatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Audio Call Container */
+.audioCallContainer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.audioCallContainer::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.audioCallAvatar {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.audioAvatar {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    margin-bottom: 24px;
+}
+
+.audioWaveform {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.audioWaveform span {
+    width: 4px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 2px;
+    animation: waveform 1.2s ease-in-out infinite;
+}
+
+.audioWaveform span:nth-child(1) {
+    height: 20px;
+    animation-delay: 0s;
+}
+
+.audioWaveform span:nth-child(2) {
+    height: 32px;
+    animation-delay: 0.1s;
+}
+
+.audioWaveform span:nth-child(3) {
+    height: 24px;
+    animation-delay: 0.2s;
+}
+
+.audioWaveform span:nth-child(4) {
+    height: 16px;
+    animation-delay: 0.3s;
+}
+
+.audioWaveform span:nth-child(5) {
+    height: 28px;
+    animation-delay: 0.4s;
+}
+
+@keyframes waveform {
+    0%, 100% {
+        transform: scaleY(0.5);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
+/* Call Controls */
+.callControls {
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.incomingCallControls {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+}
+
+.activeCallControls {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    align-items: center;
+}
+
+.callButton {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.callButton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.callButton:active {
+    transform: scale(0.95);
+}
+
+.callButton.accept {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+}
+
+.callButton.decline,
+.callButton.endCall {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: white;
+}
+
+.callButton.audio {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(69, 160, 73, 0.3));
+    border: 2px solid rgba(76, 175, 80, 0.5);
+    color: #4CAF50;
+}
+
+.callButton.audioMuted {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(211, 47, 47, 0.3));
+    border: 2px solid rgba(244, 67, 54, 0.5);
+    color: #f44336;
+}
+
+.callButton.video {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(30, 136, 229, 0.3));
+    border: 2px solid rgba(33, 150, 243, 0.5);
+    color: #2196F3;
+}
+
+.callButton.videoMuted {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(211, 47, 47, 0.3));
+    border: 2px solid rgba(244, 67, 54, 0.5);
+    color: #f44336;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .callModal {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        min-width: unset;
+        min-height: unset;
+    }
+    
+    .callHeader {
+        padding: 16px;
+    }
+    
+    .callUsername {
+        font-size: 1.1rem;
+    }
+    
+    .localVideoWrapper {
+        width: 120px;
+        height: 90px;
+        top: 12px;
+        right: 12px;
+    }
+    
+    .audioAvatar {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .callButton {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .activeCallControls {
+        gap: 12px;
+    }
+    
+    .incomingCallControls {
+        gap: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .callControls {
+        padding: 16px;
+    }
+    
+    .audioCallAvatar {
+        margin-bottom: 16px;
+    }
+    
+    .audioAvatar {
+        width: 100px;
+        height: 100px;
+    }
+}

@@ -1,0 +1,692 @@
+.tradeCentre {
+  background-color: #f0f2f5;
+  min-height: 100vh;
+  padding: 20px;
+  width: 100%;
+}
+
+.tradeCentreWrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.tradeCentreHeader {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.tradeCentreHeader h2 {
+  color: #1877f2;
+  margin: 0 0 10px 0;
+  font-size: 32px;
+}
+
+.tradeCentreHeader p {
+  color: #65676b;
+  margin: 0 0 20px 0;
+  font-size: 16px;
+}
+
+.statsContainer {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  min-width: 100px;
+}
+
+.statNumber {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1877f2;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #65676b;
+  margin-top: 4px;
+}
+
+.statCard.urgent {
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+}
+
+.statCard.urgent .statNumber {
+  color: #856404;
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.refreshBtn {
+  padding: 8px 16px;
+  background-color: #1877f2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.refreshBtn:hover {
+  background-color: #166fe5;
+}
+
+.refreshBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Controls Container */
+.controlsContainer {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.searchContainer {
+  flex: 1;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e4e6ea;
+  border-radius: 25px;
+  font-size: 14px;
+  background-color: #f8f9fa;
+  transition: all 0.3s;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #1877f2;
+  background-color: white;
+}
+
+.filterContainer {
+  min-width: 150px;
+}
+
+.filterSelect {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e4e6ea;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #1877f2;
+}
+
+.tradeCentreTabs {
+  display: flex;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  overflow-x: auto;
+}
+
+.tab {
+  flex: 1;
+  padding: 15px 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #65676b;
+  transition: all 0.3s;
+  white-space: nowrap;
+  min-width: 120px;
+}
+
+.tab:hover {
+  background-color: #f8f9fa;
+  color: #1877f2;
+}
+
+.tab.active {
+  background-color: #1877f2;
+  color: white;
+  border-radius: 10px;
+}
+
+.tab {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #f44336;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 16px;
+  text-align: center;
+}
+
+.tab.active .badge {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.tradeCentreContent {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.productsTable,
+.offersTable,
+.claimsTable,
+.myOffersTable,
+.myClaimsTable,
+.transactionsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.productsTable th,
+.offersTable th,
+.claimsTable th,
+.myOffersTable th,
+.myClaimsTable th,
+.transactionsTable th {
+  background-color: #f8f9fa;
+  padding: 15px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #1c1e21;
+  border-bottom: 2px solid #e4e6ea;
+  white-space: nowrap;
+}
+
+.productsTable td,
+.offersTable td,
+.claimsTable td,
+.myOffersTable td,
+.myClaimsTable td,
+.transactionsTable td {
+  padding: 15px 12px;
+  border-bottom: 1px solid #e4e6ea;
+  vertical-align: top;
+}
+
+.productsTable tr:hover,
+.offersTable tr:hover,
+.claimsTable tr:hover,
+.myOffersTable tr:hover,
+.myClaimsTable tr:hover,
+.transactionsTable tr:hover {
+  background-color: #f8f9fa;
+}
+
+.productCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.productCell strong {
+  color: #1c1e21;
+  font-weight: 600;
+}
+
+.productCell small {
+  color: #65676b;
+  font-size: 12px;
+}
+
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.userImg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.typeBadge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.typeBadge.sale {
+  background-color: #e7f3ff;
+  color: #1877f2;
+}
+
+.typeBadge.giveaway {
+  background-color: #e8f5e8;
+  color: #42b72a;
+}
+
+.typeBadge.exchange {
+  background-color: #fff3e0;
+  color: #ff9800;
+}
+
+.typeBadge.sold {
+  background-color: #e8f5e8;
+  color: #4caf50;
+}
+
+.typeBadge.bought {
+  background-color: #e7f3ff;
+  color: #1877f2;
+}
+
+.statusBadge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+.messageCell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.messageCell:hover {
+  white-space: normal;
+  word-wrap: break-word;
+  max-height: none;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.actionBtn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.actionBtn.edit {
+  background-color: #1877f2;
+  color: white;
+}
+
+.actionBtn.edit:hover {
+  background-color: #166fe5;
+}
+
+.actionBtn.delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.actionBtn.delete:hover {
+  background-color: #d32f2f;
+}
+
+.actionBtn.accept {
+  background-color: #4caf50;
+  color: white;
+}
+
+.actionBtn.accept:hover {
+  background-color: #388e3c;
+}
+
+.actionBtn.reject {
+  background-color: #f44336;
+  color: white;
+}
+
+.actionBtn.reject:hover {
+  background-color: #d32f2f;
+}
+
+.actionBtn.complete {
+  background-color: #2e7d32;
+  color: white;
+}
+
+.actionBtn.complete:hover {
+  background-color: #1b5e20;
+}
+
+.actionBtn.reactivate {
+  background-color: #ff9800;
+  color: white;
+}
+
+.actionBtn.reactivate:hover {
+  background-color: #f57c00;
+}
+
+.actionBtn.contact {
+  background-color: #1877f2;
+  color: white;
+}
+
+.actionBtn.contact:hover {
+  background-color: #166fe5;
+}
+
+.actionBtn.message {
+  background-color: #42b72a;
+  color: white;
+}
+
+.actionBtn.message:hover {
+  background-color: #36a420;
+}
+
+.actionBtn.cancel {
+  background-color: #6c757d;
+  color: white;
+}
+
+.actionBtn.cancel:hover {
+  background-color: #5a6268;
+}
+
+.actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.statusSelect {
+  padding: 4px 8px;
+  border: 1px solid #e4e6ea;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.statusSelect:hover {
+  border-color: #1877f2;
+}
+
+.loading,
+.noData {
+  text-align: center;
+  padding: 60px 20px;
+  color: #65676b;
+  font-size: 16px;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e4e6ea;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  color: #1c1e21;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #65676b;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.closeBtn:hover {
+  background-color: #f0f2f5;
+}
+
+.modalBody {
+  padding: 20px;
+}
+
+.modalBody p {
+  margin: 0 0 15px 0;
+  color: #1c1e21;
+}
+
+.responseTextarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  border: 1px solid #e4e6ea;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.responseTextarea:focus {
+  outline: none;
+  border-color: #1877f2;
+}
+
+.modalActions {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  border-top: 1px solid #e4e6ea;
+  justify-content: flex-end;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .tradeCentreTabs {
+    flex-wrap: wrap;
+  }
+  
+  .tab {
+    flex: 1 1 calc(33.333% - 10px);
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tradeCentre {
+    padding: 10px;
+  }
+  
+  .tradeCentreHeader {
+    padding: 20px;
+  }
+  
+  .tradeCentreHeader h2 {
+    font-size: 24px;
+  }
+  
+  .tradeCentreTabs {
+    flex-direction: column;
+  }
+  
+  .tab {
+    flex: none;
+    width: 100%;
+  }
+  
+  .tableContainer {
+    font-size: 12px;
+  }
+  
+  .productsTable th,
+  .offersTable th,
+  .claimsTable th,
+  .myOffersTable th,
+  .myClaimsTable th,
+  .transactionsTable th,
+  .productsTable td,
+  .offersTable td,
+  .claimsTable td,
+  .myOffersTable td,
+  .myClaimsTable td,
+  .transactionsTable td {
+    padding: 10px 8px;
+  }
+  
+  .statsContainer {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .statCard {
+    min-width: auto;
+    padding: 10px;
+  }
+  
+  .modalContent {
+    width: 95%;
+  }
+  
+  .modalActions {
+    flex-direction: column;
+  }
+  
+  .statusSelect {
+    width: 100%;
+    margin-top: 4px;
+  }
+  
+  .controlsContainer {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .filterContainer {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .headerTop {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .headerTop > div {
+    text-align: center;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .actionBtn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tradeCentreHeader h2 {
+    font-size: 20px;
+  }
+  
+  .tradeCentreHeader p {
+    font-size: 14px;
+  }
+  
+  .messageCell {
+    max-width: 150px;
+  }
+  
+  .userCell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .userImg {
+    width: 24px;
+    height: 24px;
+  }
+}

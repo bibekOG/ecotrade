@@ -1,0 +1,232 @@
+.productMessages {
+  padding: 12px 8px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+
+.productMessagesTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #050505;
+  margin: 0 8px 12px 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e4e6eb;
+}
+
+/* Product Image Section at Top */
+.productMessagesProductSection {
+  margin: 0 8px 12px 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e4e6eb;
+}
+
+.productMessagesMainImage {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #e4e6eb;
+}
+
+.productMessagesMainImagePlaceholder {
+  width: 100%;
+  height: 180px;
+  border-radius: 8px;
+  background: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  margin-bottom: 8px;
+  border: 1px solid #e4e6eb;
+}
+
+.productMessagesProductInfo {
+  padding: 0 4px;
+}
+
+.productMessagesProductName {
+  font-size: 15px;
+  font-weight: 600;
+  color: #050505;
+  margin: 0 0 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.productMessagesProductUser {
+  font-size: 13px;
+  color: #65676b;
+  margin: 0;
+}
+
+.productMessagesContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 4px;
+}
+
+.productMessagesContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.productMessagesContainer::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 3px;
+}
+
+.productMessagesContainer::-webkit-scrollbar-thumb {
+  background: #bcc0c4;
+  border-radius: 3px;
+}
+
+.productMessagesContainer::-webkit-scrollbar-thumb:hover {
+  background: #8a8d91;
+}
+
+.productMessageItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 4px;
+}
+
+.productMessageItem:hover {
+  background: #f0f2f5;
+}
+
+.productMessageItem.selected {
+  background: #e7f3ff;
+  border: 1px solid #0084ff;
+}
+
+.productMessageImageContainer {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.productMessageProductImage {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #e4e6eb;
+}
+
+.productMessageProductImagePlaceholder {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  border: 1px solid #e4e6eb;
+}
+
+.productMessageUserAvatar {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  object-fit: cover;
+  background: #ffffff;
+}
+
+.productMessageContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.productMessageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.productMessageProductName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #050505;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.productMessageUnreadBadge {
+  background: #0084ff;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.productMessageUser {
+  font-size: 13px;
+  color: #65676b;
+  font-weight: 400;
+}
+
+.productMessagePreview {
+  font-size: 13px;
+  color: #65676b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.productMessageTime {
+  font-size: 11px;
+  color: #8a8d91;
+  margin-top: 2px;
+}
+
+.productMessagesEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: #65676b;
+}
+
+.productMessagesEmpty p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.emptySubtext {
+  font-size: 12px !important;
+  color: #8a8d91 !important;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .productMessages {
+    display: none;
+  }
+}
+

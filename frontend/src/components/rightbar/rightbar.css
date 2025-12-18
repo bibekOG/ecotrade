@@ -1,0 +1,281 @@
+.rightbar {
+  flex: 3.5;
+}
+
+.rightbarWrapper {
+  padding: 20px 20px 0 0;
+}
+
+.birthdayContainer {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.birthdayImg {
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+}
+
+.birthdayText {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.rightbarAd {
+  width: 100%;
+  border-radius: 10px;
+  margin: 30px 0;
+}
+
+.rightbarTitle{
+    margin-bottom: 20px;
+}
+
+.rightbarFriendList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.rightbarTitle{
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.rightbarInfo{
+  margin-bottom: 30px;
+}
+
+.rightbarInfoItem{
+  margin-bottom: 10px;
+}
+
+.rightbarInfoKey{
+  font-weight: 500;
+  margin-right: 15px;
+  color: #555;
+}
+
+.rightbarInfoValue{
+  font-weight: 300;
+}
+
+.rightbarFollowings{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.rightbarFollowing{
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.rightbarFollowing:hover {
+  transform: scale(1.02);
+}
+
+.rightbarFollowingImg{
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  background: #e4e6eb;
+}
+
+.rightbarFollowingName{
+  font-size: 13px;
+  font-weight: 500;
+  color: #050505;
+  text-align: center;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.rightbarFollowButton{
+  margin-top: 30px;
+  margin-bottom: 10px;
+  border: none;
+  background-color: #1872f2;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.rightbarFollowButton:focus{
+  outline: none;
+}
+
+/* Enhanced Ads Section */
+.adsSection {
+  margin-bottom: 30px;
+}
+
+.adCard {
+  background: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.adCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.adImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.adContent {
+  padding: 15px;
+}
+
+.adTag {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 15px;
+  display: inline-block;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.adTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 8px 0 6px 0;
+}
+
+.adDescription {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.adButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.adButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Trending Section */
+.trendingSection {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid #f0f0f0;
+}
+
+.trendingTopics {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trendingItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.trendingItem:hover {
+  background: #e9ecef;
+  transform: translateX(2px);
+}
+
+.trendingHash {
+  color: #667eea;
+  font-weight: 600;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.trendingText {
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+  font-size: 14px;
+}
+
+.trendingCount {
+  font-size: 12px;
+  color: #666;
+  background: #dee2e6;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+/* Enhanced Right bar title */
+.rightbarTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.rightbarTitle:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 30px;
+  height: 3px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
+}

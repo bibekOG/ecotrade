@@ -1,0 +1,81 @@
+/* Notification Bell Styles */
+
+.notification-bell-container {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-bell-button {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-center;
+}
+
+.notification-bell-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.notification-bell-button:active {
+  transform: scale(0.95);
+}
+
+.notification-bell-icon {
+  width: 24px;
+  height: 24px;
+  color: #555;
+  transition: color 0.2s ease;
+}
+
+.notification-bell-button:hover .notification-bell-icon {
+  color: #000;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: #ff4444;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 10px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .notification-bell-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .notification-bell-icon {
+    color: #bbb;
+  }
+
+  .notification-bell-button:hover .notification-bell-icon {
+    color: #fff;
+  }
+}

@@ -1,0 +1,211 @@
+/* Online friends container - Lite style */
+.chatOnline {
+    background: #ffffff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Online friends header - Lite */
+.chatOnlineTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: #050505;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    padding: 12px 8px 8px 8px;
+    border-bottom: 1px solid #e4e6eb;
+}
+
+/* Friend item - Lite style */
+.chatOnlineFriend {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 400;
+    margin: 0;
+    padding: 12px 8px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    position: relative;
+    background: transparent;
+}
+
+.chatOnlineFriend:hover {
+    background: #f2f3f5;
+}
+
+.chatOnlineFriend:active {
+    background: #e4e6eb;
+}
+
+/* Profile image container - Lite */
+.chatOnlineImgContainer {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+/* Profile image - Lite */
+.chatOnlineImg {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: none;
+}
+
+/* Online status badge - Lite */
+.chatOnlineBadge {
+    position: absolute;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background: #31a24c;
+    bottom: 0;
+    right: 0;
+    border: 2px solid white;
+}
+
+/* Username styling - Lite */
+.chatOnlineName {
+    font-weight: 500;
+    font-size: 15px;
+    color: #050505;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Friends list container */
+.chatOnlineFriendsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+/* Custom scrollbar */
+.chatOnlineFriendsContainer::-webkit-scrollbar {
+    width: 4px;
+}
+
+.chatOnlineFriendsContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chatOnlineFriendsContainer::-webkit-scrollbar-thumb {
+    background: rgba(72, 187, 120, 0.3);
+    border-radius: 2px;
+}
+
+.chatOnlineFriendsContainer::-webkit-scrollbar-thumb:hover {
+    background: rgba(72, 187, 120, 0.5);
+}
+
+/* Friends section header */
+.friendsSectionHeader {
+    padding: 8px 8px 4px 8px;
+    margin-top: 8px;
+}
+
+.friendsSectionHeader:first-child {
+    margin-top: 0;
+}
+
+.sectionTitle {
+    font-size: 12px;
+    font-weight: 600;
+    color: #65676b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.friendsSectionDivider {
+    height: 1px;
+    background: #e4e6eb;
+    margin: 8px 8px;
+}
+
+/* Friend status classes */
+.chatOnlineFriend.offline {
+    opacity: 0.7;
+}
+
+.chatOnlineFriend.offline:hover {
+    opacity: 1;
+}
+
+/* Empty state */
+.chatOnlineEmpty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    color: #a0aec0;
+}
+
+.chatOnlineEmpty svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.chatOnlineEmpty p {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Animation for friend items */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.chatOnlineFriend {
+    animation: slideInRight 0.3s ease-out;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .chatOnline {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .chatOnlineFriend {
+        padding: 12px 14px;
+    }
+    
+    .chatOnlineImgContainer {
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+    }
+    
+    .chatOnlineImg {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .chatOnlineBadge {
+        height: 12px;
+        width: 12px;
+    }
+}

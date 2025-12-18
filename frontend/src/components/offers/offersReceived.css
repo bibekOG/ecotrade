@@ -1,0 +1,547 @@
+.offersReceived {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.offersReceivedHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.offersReceivedHeader h2 {
+  color: #1a1a1a;
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.tabButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.tabButton {
+  padding: 12px 24px;
+  border: 2px solid #e1e8ed;
+  background: white;
+  color: #666;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.tabButton:hover {
+  border-color: #1877f2;
+  color: #1877f2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.15);
+}
+
+.tabButton.active {
+  background: linear-gradient(135deg, #1877f2 0%, #166fe5 100%);
+  color: white;
+  border-color: #1877f2;
+  box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
+}
+
+/* Table Container */
+.tableContainer {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f2f5;
+  overflow: hidden;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+/* Table Styles */
+.offersTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.offersTable thead {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 2px solid #dee2e6;
+}
+
+.offersTable th {
+  padding: 18px 16px;
+  text-align: left;
+  font-weight: 700;
+  color: #1a1a1a;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #dee2e6;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.offersTable tbody tr {
+  border-bottom: 1px solid #f0f2f5;
+  transition: all 0.3s ease;
+}
+
+.offersTable tbody tr:hover {
+  background: #f8f9fa;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.offersTable td {
+  padding: 20px 16px;
+  vertical-align: top;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+/* Item Cell */
+.itemCell {
+  min-width: 250px;
+}
+
+.itemInfo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.itemImage {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid #e9ecef;
+}
+
+.itemImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.itemDetails h4 {
+  margin: 0 0 5px 0;
+  color: #1a1a1a;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.itemCategory {
+  margin: 0 0 8px 0;
+  color: #666;
+  font-size: 13px;
+}
+
+.itemStatus {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Asked Offers Cell */
+.askedOffersCell {
+  min-width: 150px;
+}
+
+.priceInfo, .exchangeInfo, .giveawayInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.originalPrice {
+  font-size: 18px;
+  font-weight: 700;
+  color: #28a745;
+}
+
+.minPrice {
+  font-size: 13px;
+  color: #666;
+}
+
+.exchangeFor, .desiredProduct {
+  font-size: 14px;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+/* Offered Offer Cell */
+.offeredOfferCell {
+  min-width: 150px;
+}
+
+.offerAmount, .exchangeOffer, .claimOffer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1877f2;
+}
+
+.exchangeProduct {
+  font-size: 14px;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.claimMessage {
+  font-size: 14px;
+  color: #ff6b35;
+  font-weight: 600;
+}
+
+.offerDate, .claimDate {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Offered By Cell */
+.offeredByCell, .claimedByCell {
+  min-width: 180px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e9ecef;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.username {
+  font-weight: 600;
+  color: #1a1a1a;
+  font-size: 14px;
+}
+
+.userLocation {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Message Cell */
+.messageCell {
+  min-width: 200px;
+  max-width: 250px;
+}
+
+.messageContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.messageText {
+  margin: 0;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.offerStatus, .claimStatus {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  align-self: flex-start;
+}
+
+/* Actions Cell */
+.actionsCell {
+  min-width: 150px;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.acceptBtn, .rejectBtn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.acceptBtn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.acceptBtn:hover {
+  background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+.rejectBtn {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.rejectBtn:hover {
+  background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+.acceptedStatus, .rejectedStatus {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.acceptedBadge, .rejectedBadge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.acceptedBadge {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+}
+
+.rejectedBadge {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+}
+
+.responseText {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Product Type Cell */
+.productTypeCell {
+  min-width: 150px;
+}
+
+.productTypeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.typeBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  align-self: flex-start;
+}
+
+.typeBadge.giveaway {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  color: white;
+}
+
+/* Claim Request Cell */
+.claimRequestCell {
+  min-width: 150px;
+}
+
+.claimRequest {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.claimType {
+  font-size: 14px;
+  color: #ff6b35;
+  font-weight: 600;
+}
+
+/* Loading and No Data */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1877f2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.noDataMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.noDataIcon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.noDataMessage h3 {
+  margin: 0 0 10px 0;
+  color: #1a1a1a;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.noDataMessage p {
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .offersTable {
+    font-size: 13px;
+  }
+  
+  .offersTable th,
+  .offersTable td {
+    padding: 15px 12px;
+  }
+  
+  .itemImage {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .userAvatar {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 768px) {
+  .offersReceivedHeader {
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+  }
+  
+  .tabButtons {
+    justify-content: center;
+  }
+  
+  .tableWrapper {
+    overflow-x: scroll;
+  }
+  
+  .offersTable {
+    min-width: 800px;
+  }
+  
+  .offersTable th,
+  .offersTable td {
+    padding: 12px 8px;
+  }
+  
+  .itemInfo {
+    gap: 10px;
+  }
+  
+  .itemImage {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .userInfo {
+    gap: 8px;
+  }
+  
+  .userAvatar {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .actionButtons {
+    flex-direction: row;
+    gap: 5px;
+  }
+  
+  .acceptBtn,
+  .rejectBtn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}

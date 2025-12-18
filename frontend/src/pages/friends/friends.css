@@ -1,0 +1,681 @@
+.friends {
+  flex: 6;
+}
+
+.friendsWrapper {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.friendsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.friendsHeader h2 {
+  color: #1a1a1a;
+  margin: 0;
+  font-size: 28px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.searchBtn {
+  padding: 10px 20px;
+  background: #17a2b8;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  font-size: 14px;
+}
+
+.searchBtn:hover {
+  background: #138496;
+}
+
+.tabButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.tabButton {
+  padding: 10px 20px;
+  border: 2px solid #e1e8ed;
+  background: white;
+  color: #666;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.tabButton:hover {
+  border-color: #1877f2;
+  color: #1877f2;
+}
+
+.tabButton.active {
+  background: #1877f2;
+  color: white;
+  border-color: #1877f2;
+}
+
+/* Search Section */
+.searchSection {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.searchInput input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e1e8ed;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.searchInput input:focus {
+  outline: none;
+  border-color: #1877f2;
+}
+
+.searchResults {
+  margin-top: 25px;
+}
+
+.searchResults h3 {
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  font-size: 20px;
+  border-bottom: 1px solid #e1e8ed;
+  padding-bottom: 10px;
+}
+
+.userGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.userCard {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e1e8ed;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.userCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.userImg {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.userInfo h4 {
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.userInfo p {
+  color: #666;
+  margin: 0 0 15px 0;
+  font-size: 14px;
+}
+
+.userActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.addFriendBtn, .viewProfileBtn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.addFriendBtn {
+  background: #28a745;
+  color: white;
+}
+
+.addFriendBtn:hover {
+  background: #218838;
+}
+
+.viewProfileBtn {
+  background: #6c757d;
+  color: white;
+}
+
+.viewProfileBtn:hover {
+  background: #5a6268;
+}
+
+/* Friends Tab */
+.friendsTab {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.noFriends {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.noFriends h3 {
+  color: #1a1a1a;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.noFriends p {
+  margin-bottom: 25px;
+  font-size: 16px;
+}
+
+.searchUsersBtn {
+  padding: 12px 24px;
+  background: #1877f2;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.searchUsersBtn:hover {
+  background: #166fe5;
+}
+
+.friendsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.friendCard {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e1e8ed;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.friendCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.friendImg {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.friendInfo h4 {
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+  font-size: 20px;
+}
+
+.friendInfo p {
+  color: #666;
+  margin: 0 0 20px 0;
+  font-size: 14px;
+}
+
+.friendActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.messageBtn, .viewProfileBtn, .removeFriendBtn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.messageBtn {
+  background: #17a2b8;
+  color: white;
+}
+
+.messageBtn:hover {
+  background: #138496;
+}
+
+.removeFriendBtn {
+  background: #dc3545;
+  color: white;
+}
+
+.removeFriendBtn:hover {
+  background: #c82333;
+}
+
+/* Pending Requests Tab */
+.pendingTab {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.noRequests {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.noRequests h3 {
+  color: #1a1a1a;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.noRequests p {
+  font-size: 16px;
+}
+
+.requestsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.requestCard {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e1e8ed;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.requestCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.requestImg {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.requestInfo h4 {
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+  font-size: 20px;
+}
+
+.requestInfo p {
+  color: #666;
+  margin: 0 0 5px 0;
+  font-size: 14px;
+}
+
+.requestDate {
+  color: #999;
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+.requestActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.acceptBtn, .rejectBtn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.acceptBtn {
+  background: #28a745;
+  color: white;
+}
+
+.acceptBtn:hover {
+  background: #218838;
+}
+
+.rejectBtn {
+  background: #dc3545;
+  color: white;
+}
+
+.rejectBtn:hover {
+  background: #c82333;
+}
+
+/* Sent Requests Tab */
+.sentTab {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.noSentRequests {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.noSentRequests h3 {
+  color: #1a1a1a;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.noSentRequests p {
+  font-size: 16px;
+}
+
+.sentRequestsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.sentRequestCard {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e1e8ed;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sentRequestCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.sentRequestImg {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.sentRequestInfo h4 {
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+  font-size: 20px;
+}
+
+.sentRequestInfo p {
+  color: #666;
+  margin: 0 0 5px 0;
+  font-size: 14px;
+}
+
+.sentRequestDate {
+  color: #999;
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+.sentRequestActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.cancelBtn {
+  padding: 10px 20px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  transition: background 0.3s ease;
+}
+
+.cancelBtn:hover {
+  background: #5a6268;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 18px;
+}
+
+/* Friends Directory Tab */
+.directoryTab {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.directoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.directoryCard {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e1e8ed;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.directoryCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.directoryCardHeader {
+  position: relative;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.directoryImg {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.onlineIndicator {
+  position: absolute;
+  bottom: 5px;
+  right: 50%;
+  transform: translateX(50%);
+  width: 20px;
+  height: 20px;
+  background: #28a745;
+  border-radius: 50%;
+  border: 3px solid #fff;
+}
+
+.directoryCardInfo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.directoryCardInfo h4 {
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.friendEmail {
+  color: #666;
+  margin: 0 0 15px 0;
+  font-size: 12px;
+  word-break: break-word;
+}
+
+.friendStats {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.stat {
+  background: #17a2b8;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.directoryCardActions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.directoryCardActions button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.directoryCardActions .messageBtn {
+  background: #17a2b8;
+  color: white;
+}
+
+.directoryCardActions .messageBtn:hover {
+  background: #138496;
+  transform: scale(1.1);
+}
+
+.directoryCardActions .viewProfileBtn {
+  background: #6c757d;
+  color: white;
+}
+
+.directoryCardActions .viewProfileBtn:hover {
+  background: #5a6268;
+  transform: scale(1.1);
+}
+
+.directoryCardActions .removeFriendBtn {
+  background: #dc3545;
+  color: white;
+}
+
+.directoryCardActions .removeFriendBtn:hover {
+  background: #c82333;
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .friendsHeader {
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+  }
+  
+  .headerActions {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .tabButtons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .userGrid, .friendsGrid, .requestsGrid, .sentRequestsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .directoryGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .userActions, .friendActions, .requestActions, .sentRequestActions {
+    flex-direction: column;
+  }
+  
+  .searchBtn, .tabButton {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+}
