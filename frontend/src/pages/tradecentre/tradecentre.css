@@ -1,7 +1,11 @@
+.tradeCentrePageContent {
+  flex: 6;
+  padding: 20px;
+}
+
 .tradeCentre {
   background-color: #f0f2f5;
-  min-height: 100vh;
-  padding: 20px;
+  min-height: calc(100vh - 56px);
   width: 100%;
 }
 
@@ -12,142 +16,243 @@
 
 .tradeCentreHeader {
   background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-.tradeCentreHeader h2 {
-  color: #1877f2;
-  margin: 0 0 10px 0;
-  font-size: 32px;
-}
-
-.tradeCentreHeader p {
-  color: #65676b;
-  margin: 0 0 20px 0;
-  font-size: 16px;
-}
-
-.statsContainer {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.statCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 15px;
-  background-color: #f8f9fa;
+  padding: 16px 20px;
   border-radius: 8px;
-  min-width: 100px;
-}
-
-.statNumber {
-  font-size: 24px;
-  font-weight: bold;
-  color: #1877f2;
-}
-
-.statLabel {
-  font-size: 12px;
-  color: #65676b;
-  margin-top: 4px;
-}
-
-.statCard.urgent {
-  background-color: #fff3cd;
-  border-left: 4px solid #ffc107;
-}
-
-.statCard.urgent .statNumber {
-  color: #856404;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+  text-align: center;
 }
 
 .headerTop {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+}
+
+.tradeCentreHeader h2 {
+  color: #1a1a1a;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.tradeCentreHeader p {
+  color: #65676b;
+  margin: 2px 0 0 0;
+  font-size: 13px;
+  font-weight: 400;
 }
 
 .refreshBtn {
-  padding: 8px 16px;
-  background-color: #1877f2;
-  color: white;
-  border: none;
+  padding: 6px 12px;
+  background-color: transparent;
+  color: #1877f2;
+  border: 1px solid #e7f3ff;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  transition: all 0.3s;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .refreshBtn:hover {
-  background-color: #166fe5;
+  background-color: #e7f3ff;
 }
 
 .refreshBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  opacity: 0.5;
+  cursor: default;
 }
 
-/* Controls Container */
+/* Stats Cards */
+.statsContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 0;
+}
+
+.statCard {
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e4e6eb;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statCard:hover {
+  background-color: #f9f9f9;
+  border-color: #dce0e5;
+  box-shadow: none;
+  transform: none;
+}
+
+.statIconWrapper {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statIconWrapper.blue {
+  background-color: #e7f3ff;
+  color: #1877f2;
+}
+
+.statIconWrapper.orange {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.statIconWrapper.green {
+  background-color: #e8f5e9;
+  color: #43a047;
+}
+
+.statIconWrapper.purple {
+  background-color: #f3e5f5;
+  color: #8e24aa;
+}
+
+.statIconWrapper svg {
+  font-size: 18px !important;
+}
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.statNumber {
+  font-size: 16px;
+  font-weight: 700;
+  color: #050505;
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #65676b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statCard.urgent {
+  border: 1px solid #ffb74d;
+  background-color: #fff3e0;
+}
+
+/* Controls Toolbar */
 .controlsContainer {
   display: flex;
-  gap: 20px;
+  gap: 12px;
   align-items: center;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  margin-bottom: 20px;
 }
 
 .searchContainer {
   flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  color: #65676b;
+  font-size: 18px !important;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .searchInput {
   width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #e4e6ea;
-  border-radius: 25px;
-  font-size: 14px;
-  background-color: #f8f9fa;
-  transition: all 0.3s;
+  padding: 10px 16px 10px 36px;
+  border: none;
+  border-radius: 20px;
+  font-size: 15px;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow instead of border */
+  transition: all 0.2s;
+  color: #050505;
+}
+
+.searchInput::placeholder {
+  color: #65676b;
+  /* Ensure placeholder is visible */
 }
 
 .searchInput:focus {
   outline: none;
-  border-color: #1877f2;
   background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px #e7f3ff;
 }
 
 .filterContainer {
-  min-width: 150px;
+  position: relative;
+  min-width: 160px;
+}
+
+.filterIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #65676b;
+  font-size: 18px !important;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .filterSelect {
   width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #e4e6ea;
-  border-radius: 8px;
+  padding: 10px 16px 10px 36px;
+  border: none;
+  border-radius: 20px;
   font-size: 14px;
+  font-weight: 500;
   background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s;
+  color: #050505;
+  appearance: none;
 }
 
 .filterSelect:focus {
   outline: none;
-  border-color: #1877f2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px #e7f3ff;
+}
+
+/* Mobile responsive fix for statCards */
+@media (max-width: 768px) {
+  .statsContainer {
+    flex-wrap: wrap;
+  }
+
+  .statCard {
+    flex: 1 1 calc(50% - 20px);
+  }
 }
 
 .tradeCentreTabs {
@@ -171,11 +276,14 @@
   transition: all 0.3s;
   white-space: nowrap;
   min-width: 120px;
+  border-radius: 8px;
+  /* Rounded corners for pills */
 }
 
 .tab:hover {
-  background-color: #f8f9fa;
-  color: #1877f2;
+  background-color: #e4e6eb;
+  /* Standard hover color */
+  color: #050505;
 }
 
 .tab.active {
@@ -564,7 +672,7 @@
   .tradeCentreTabs {
     flex-wrap: wrap;
   }
-  
+
   .tab {
     flex: 1 1 calc(33.333% - 10px);
     min-width: 100px;
@@ -575,28 +683,28 @@
   .tradeCentre {
     padding: 10px;
   }
-  
+
   .tradeCentreHeader {
     padding: 20px;
   }
-  
+
   .tradeCentreHeader h2 {
     font-size: 24px;
   }
-  
+
   .tradeCentreTabs {
     flex-direction: column;
   }
-  
+
   .tab {
     flex: none;
     width: 100%;
   }
-  
+
   .tableContainer {
     font-size: 12px;
   }
-  
+
   .productsTable th,
   .offersTable th,
   .claimsTable th,
@@ -611,55 +719,55 @@
   .transactionsTable td {
     padding: 10px 8px;
   }
-  
+
   .statsContainer {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .statCard {
     min-width: auto;
     padding: 10px;
   }
-  
+
   .modalContent {
     width: 95%;
   }
-  
+
   .modalActions {
     flex-direction: column;
   }
-  
+
   .statusSelect {
     width: 100%;
     margin-top: 4px;
   }
-  
+
   .controlsContainer {
     flex-direction: column;
     gap: 15px;
   }
-  
+
   .filterContainer {
     min-width: auto;
     width: 100%;
   }
-  
+
   .headerTop {
     flex-direction: column;
     align-items: center;
     gap: 15px;
   }
-  
-  .headerTop > div {
+
+  .headerTop>div {
     text-align: center;
   }
-  
+
   .actionButtons {
     flex-direction: column;
     gap: 4px;
   }
-  
+
   .actionBtn {
     padding: 4px 8px;
     font-size: 11px;
@@ -670,21 +778,21 @@
   .tradeCentreHeader h2 {
     font-size: 20px;
   }
-  
+
   .tradeCentreHeader p {
     font-size: 14px;
   }
-  
+
   .messageCell {
     max-width: 150px;
   }
-  
+
   .userCell {
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
   }
-  
+
   .userImg {
     width: 24px;
     height: 24px;

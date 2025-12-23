@@ -5,6 +5,7 @@ import {
   Room,
   EmojiEmotions,
   Cancel,
+  Videocam,
 } from "@material-ui/icons";
 import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
@@ -16,12 +17,33 @@ export default function Share() {
   const desc = useRef();
   const [file, setFile] = useState(null);
   const [showTagSuggestions, setShowTagSuggestions] = useState(false);
+  const [showFeelings, setShowFeelings] = useState(false);
 
   // Popular tags for suggestions
   const popularTags = [
-    "#books", "#reuse", "#tech", "#food", "#travel", "#music", 
+    "#books", "#reuse", "#tech", "#food", "#travel", "#music",
     "#art", "#sports", "#fitness", "#fashion", "#beauty", "#gaming",
     "#movies", "#photography", "#nature", "#cooking", "#health", "#education"
+  ];
+
+  // Feelings list
+  const feelings = [
+    { name: "Happy", icon: "😃" },
+    { name: "Blessed", icon: "😇" },
+    { name: "Loved", icon: "🥰" },
+    { name: "Sad", icon: "😢" },
+    { name: "Excited", icon: "🤩" },
+    { name: "Thankful", icon: "🙏" },
+    { name: "Crazy", icon: "🤪" },
+    { name: "Cool", icon: "😎" },
+    { name: "Angry", icon: "😡" },
+    { name: "Sick", icon: "🤒" },
+    { name: "Tired", icon: "😫" },
+    { name: "Eating", icon: "🍴" },
+    { name: "Drinking", icon: "🍺" },
+    { name: "Traveling", icon: "✈️" },
+    { name: "Watching", icon: "📺" },
+    { name: "Listening", icon: "🎧" },
   ];
 
   const addTagToPost = (tag) => {
@@ -29,18 +51,39 @@ export default function Share() {
     const cursorPos = desc.current.selectionStart;
     const textBefore = currentValue.substring(0, cursorPos);
     const textAfter = currentValue.substring(cursorPos);
-    
+
     // Add space before tag if not at beginning and previous char is not space
     const spaceBefore = cursorPos > 0 && !textBefore.endsWith(' ') ? ' ' : '';
-    
+
     desc.current.value = textBefore + spaceBefore + tag + ' ' + textAfter;
-    
+
     // Set cursor position after the tag
     const newCursorPos = cursorPos + spaceBefore.length + tag.length + 1;
     desc.current.setSelectionRange(newCursorPos, newCursorPos);
     desc.current.focus();
-    
+
     setShowTagSuggestions(false);
+  };
+
+  const addFeelingToPost = (feeling) => {
+    const currentValue = desc.current.value;
+    const cursorPos = desc.current.selectionStart;
+    const textBefore = currentValue.substring(0, cursorPos);
+    const textAfter = currentValue.substring(cursorPos);
+
+    const spaceBefore = cursorPos > 0 && !textBefore.endsWith(' ') ? ' ' : '';
+    const feelingText = ` — feeling ${feeling.name} ${feeling.icon}`;
+
+    desc.current.value = textBefore + spaceBefore + feelingText + ' ' + textAfter;
+
+    // Set cursor focus
+    const newCursorPos = cursorPos + spaceBefore.length + feelingText.length + 1;
+    if (desc.current.setSelectionRange) {
+      desc.current.setSelectionRange(newCursorPos, newCursorPos);
+    }
+    desc.current.focus();
+
+    setShowFeelings(false);
   };
 
   const submitHandler = async (e) => {
@@ -58,12 +101,12 @@ export default function Share() {
       newPost.img = fileName;
       try {
         await apiClient.post("/upload", data, { headers: { 'Content-Type': 'multipart/form-data' } });
-      } catch (err) {}
+      } catch (err) { }
     }
     try {
       await apiClient.post("/posts", newPost);
       window.location.reload();
-    } catch (err) {}
+    } catch (err) { }
   };
 
   // Function to get profile picture URL
@@ -71,12 +114,12 @@ export default function Share() {
     if (!profilePicture) {
       return `${PF}person/noAvatar.png`;
     }
-    
+
     // If it's already a full URL (starts with http/https)
     if (profilePicture.startsWith('http://') || profilePicture.startsWith('https://')) {
       return profilePicture;
     }
-    
+
     // If it's a relative path, prepend the public folder
     return `${PF}${profilePicture}`;
   };
@@ -95,7 +138,7 @@ export default function Share() {
           />
           <div className="shareInputContainer">
             <input
-              placeholder={"What's in your mind " + user.username + "?"}
+              placeholder={"What's on your mind, " + user.username + "?"}
               className="shareInput"
               ref={desc}
             />
@@ -103,7 +146,7 @@ export default function Share() {
               <div className="tagSuggestions">
                 <div className="tagSuggestionsHeader">
                   <span>Popular Tags:</span>
-                  <button 
+                  <button
                     className="closeTags"
                     onClick={() => setShowTagSuggestions(false)}
                   >
@@ -123,20 +166,49 @@ export default function Share() {
                 </div>
               </div>
             )}
+
+            {showFeelings && (
+              <div className="tagSuggestions">
+                <div className="tagSuggestionsHeader">
+                  <span>Feeling/Activity:</span>
+                  <button
+                    className="closeTags"
+                    onClick={() => setShowFeelings(false)}
+                  >
+                    ×
+                  </button>
+                </div>
+                <div className="tagList">
+                  {feelings.map((feeling, index) => (
+                    <button
+                      key={index}
+                      className="tagSuggestion"
+                      onClick={() => addFeelingToPost(feeling)}
+                    >
+                      {feeling.icon} {feeling.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
-        <hr className="shareHr" />
+
         {file && (
           <div className="shareImgContainer">
             <img className="shareImg" src={URL.createObjectURL(file)} alt="" />
             <Cancel className="shareCancelImg" onClick={() => setFile(null)} />
           </div>
         )}
+
+        <hr className="shareHr" />
+
         <form className="shareBottom" onSubmit={submitHandler}>
           <div className="shareOptions">
+
             <label htmlFor="file" className="shareOption">
-              <PermMedia htmlColor="tomato" className="shareIcon" />
-              <span className="shareOptionText">Photo or Video</span>
+              <PermMedia htmlColor="#45bd62" className="shareIcon" />
+              <span className="shareOptionText">Photo/Video</span>
               <input
                 style={{ display: "none" }}
                 type="file"
@@ -145,21 +217,29 @@ export default function Share() {
                 onChange={(e) => setFile(e.target.files[0])}
               />
             </label>
-            <div 
+
+            <div
               className="shareOption"
-              onClick={() => setShowTagSuggestions(!showTagSuggestions)}
+              onClick={() => {
+                setShowFeelings(!showFeelings);
+                setShowTagSuggestions(false); // Close tags if open
+              }}
             >
-              <Label htmlColor="blue" className="shareIcon" />
-              <span className="shareOptionText">Add Tags</span>
+              <EmojiEmotions htmlColor="#f7b928" className="shareIcon" />
+              <span className="shareOptionText">Feeling/Activity</span>
             </div>
-            <div className="shareOption">
-              <Room htmlColor="green" className="shareIcon" />
-              <span className="shareOptionText">Location</span>
+
+            <div
+              className="shareOption"
+              onClick={() => {
+                setShowTagSuggestions(!showTagSuggestions);
+                setShowFeelings(false); // Close feelings if open
+              }}
+            >
+              <Label htmlColor="#1877f2" className="shareIcon" />
+              <span className="shareOptionText">Tag</span>
             </div>
-            <div className="shareOption">
-              <EmojiEmotions htmlColor="goldenrod" className="shareIcon" />
-              <span className="shareOptionText">Feelings</span>
-            </div>
+
           </div>
           <button className="shareButton" type="submit">
             Share

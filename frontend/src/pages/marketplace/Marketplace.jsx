@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useMemo, useCallback } from "re
 import apiClient from "../../utils/apiClient";
 import { AuthContext } from "../../context/AuthContext";
 import Layout from "../../components/layout/Layout";
+import Rightbar from "../../components/rightbar/Rightbar";
 import OffersReceived from "../../components/offers/OffersReceived";
 import MyOffers from "../../components/offers/MyOffers";
 import ProductMessageBox from "../../components/marketplace/ProductMessageBox";
@@ -67,7 +68,7 @@ export default function Marketplace() {
   useEffect(() => {
     try {
       localStorage.setItem("trackedSearches", JSON.stringify(trackedSearches));
-    } catch {}
+    } catch { }
   }, [trackedSearches]);
 
   // Recompute highlighted products whenever products or tracked terms change
@@ -135,23 +136,23 @@ export default function Marketplace() {
       setLoading(true);
       let url = "/products";
       const params = new URLSearchParams();
-      
+
       if (sortBy) {
         params.append("sortBy", sortBy);
       }
-      
+
       if (selectedCategory !== "All") {
         url = `/products/category/${selectedCategory}`;
       } else if (selectedType !== "All") {
         url = `/products/type/${selectedType}`;
       }
-      
+
       if (params.toString()) {
         url += `?${params.toString()}`;
       }
-      
+
       const res = await apiClient.get(url);
-      
+
       // Only update products if the data has actually changed
       setProducts(prevProducts => {
         if (JSON.stringify(prevProducts) !== JSON.stringify(res.data)) {
@@ -190,37 +191,37 @@ export default function Marketplace() {
   const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
-    
+
     setUploading(true);
-    
+
     try {
       const uploadedImages = [];
-      
+
       for (const file of files) {
         // Validate file type
         if (!file.type.startsWith('image/')) {
           alert(`${file.name} is not an image file. Please select image files only.`);
           continue;
         }
-        
+
         // Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
           alert(`${file.name} is too large. Maximum size is 5MB.`);
           continue;
         }
-        
+
         const formData = new FormData();
         formData.append("file", file);
-        
+
         try {
           console.log(`Uploading file: ${file.name}, size: ${file.size} bytes, type: ${file.type}`);
-          
+
           const res = await apiClient.post("/upload", formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
           });
-          
+
           console.log("Upload response:", res.data);
-          
+
           if (res.status === 200 && res.data?.filename) {
             // Use the filename returned from the backend
             const imagePath = `/images/${res.data.filename}`;
@@ -245,7 +246,7 @@ export default function Marketplace() {
           alert(`Failed to upload ${file.name}: ${uploadErr.response?.data || uploadErr.message || 'Unknown error'}`);
         }
       }
-      
+
       if (uploadedImages.length > 0) {
         setFormData(prev => ({
           ...prev,
@@ -271,13 +272,13 @@ export default function Marketplace() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate that at least one image is uploaded
     if (!formData.productImages || formData.productImages.length === 0) {
       alert("Please upload at least one product image.");
       return;
     }
-    
+
     try {
       console.log("Creating product with data:", {
         ...formData,
@@ -285,15 +286,15 @@ export default function Marketplace() {
         productImagesCount: formData.productImages?.length || 0,
         productImages: formData.productImages
       });
-      
+
       const res = await apiClient.post("/products", {
         ...formData,
         userId: user._id,
         validTill: new Date(formData.validTill).toISOString(),
       });
-      
+
       console.log("Product created successfully:", res.data);
-      
+
       if (res.data) {
         setShowCreateForm(false);
         setFormData({
@@ -336,70 +337,78 @@ export default function Marketplace() {
       case "browse":
         return (
           <>
-            {/* Filters */}
-            <div className="marketplaceFilters">
-              <select 
-                value={selectedCategory} 
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="filterSelect"
-              >
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-              <select 
-                value={selectedType} 
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="filterSelect"
-              >
-                {types.map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-              <select 
-                value={sortBy} 
-                onChange={(e) => setSortBy(e.target.value)}
-                className="filterSelect"
-                title="Sort products by relevance, date, or price"
-              >
-                <option value="relevance">🎯 Most Relevant</option>
-                <option value="newest">🆕 Newest First</option>
-                <option value="oldest">⏰ Oldest First</option>
-                <option value="name">📝 Name A-Z</option>
-                <option value="price-low">💰 Price: Low to High</option>
-                <option value="price-high">💰 Price: High to Low</option>
-              </select>
-              <div className="searchInputWrapper">
+            {/* Filters Bar */}
+            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6 flex flex-col md:flex-row items-center gap-4 sticky top-[70px] z-30">
+              <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer min-w-[120px]"
+                >
+                  {categories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+                <select
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer min-w-[100px]"
+                >
+                  {types.map(type => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer min-w-[140px]"
+                  title="Sort products"
+                >
+                  <option value="relevance">🎯 Relevant</option>
+                  <option value="newest">🆕 Newest</option>
+                  <option value="oldest">⏰ Oldest</option>
+                  <option value="name">📝 Name A-Z</option>
+                  <option value="price-low">💰 Price: Low</option>
+                  <option value="price-high">💰 Price: High</option>
+                </select>
+              </div>
+
+              <div className="relative flex-1 w-full">
                 <input
                   type="search"
-                  className="searchInput"
-                  placeholder="Search products (name, category, location)"
+                  className="w-full px-4 py-2 pl-10 bg-gray-50 border border-gray-200 rounded-full text-sm text-gray-700 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
                 {searchQuery !== debouncedSearchQuery && (
-                  <div className="searchLoadingIndicator">🔍</div>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2">
+                    <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                  </div>
                 )}
               </div>
-              <button
-                type="button"
-                className="trackBtn"
-                onClick={addTrackedSearch}
-                disabled={!searchQuery.trim()}
-                title="Track this search and highlight new matches"
-              >
-                Track Search
-              </button>
-              {sortBy === "relevance" && recommendations.length > 0 && (
-                <button 
+
+              <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+                <button
                   type="button"
-                  className={`recommendationsBtn ${showRecommendations ? 'active' : ''}`}
-                  onClick={() => setShowRecommendations(!showRecommendations)}
-                  title="Show top recommended products based on user activity"
+                  onClick={addTrackedSearch}
+                  disabled={!searchQuery.trim()}
+                  className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+                  title="Track this search"
                 >
-                  🎯 {showRecommendations ? 'Hide' : 'Show'} Top Picks ({recommendations.length})
+                  + Track
                 </button>
-              )}
+                {sortBy === "relevance" && recommendations.length > 0 && (
+                  <button
+                    type="button"
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${showRecommendations ? 'bg-orange-100 text-orange-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                    onClick={() => setShowRecommendations(!showRecommendations)}
+                  >
+                    🎯 Top {recommendations.length}
+                  </button>
+                )}
+              </div>
             </div>
 
             {trackedSearches.length > 0 && (
@@ -679,14 +688,14 @@ export default function Marketplace() {
                             const imageUrl = getImageUrl(image);
                             return (
                               <div key={index} className="imagePreview">
-                                <img 
-                                  src={imageUrl} 
+                                <img
+                                  src={imageUrl}
                                   alt={`Product ${index + 1}`}
                                   onError={(e) => {
                                     console.error("Failed to load image:", image, "URL:", imageUrl);
                                     // Try the raw path as fallback
                                     if (e.target.src !== image) {
-                                      e.target.src = image.startsWith('http') ? image : 
+                                      e.target.src = image.startsWith('http') ? image :
                                         `${process.env.REACT_APP_PUBLIC_FOLDER || "http://localhost:8800"}${image}`;
                                     } else {
                                       // Last resort: show error message instead of default image
@@ -721,8 +730,8 @@ export default function Marketplace() {
                     <button type="submit" className="submitBtn">
                       ✨ Create Product
                     </button>
-                    <button 
-                      type="button" 
+                    <button
+                      type="button"
                       className="cancelBtn"
                       onClick={() => setShowCreateForm(false)}
                     >
@@ -740,12 +749,12 @@ export default function Marketplace() {
                   <h3>🎯 Top Picks Based on Community Activity</h3>
                   <p>Products with highest engagement from views, clicks, and offers</p>
                 </div>
-                <div className="recommendationsList">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
                   {recommendations.map(product => (
-                    <ProductCard 
-                      key={`rec-${product._id}`} 
-                      product={product} 
-                      user={user} 
+                    <ProductCard
+                      key={`rec-${product._id}`}
+                      product={product}
+                      user={user}
                       isHighlighted={false}
                       onTrackActivity={trackActivity}
                       onProductUpdate={fetchProducts}
@@ -756,29 +765,20 @@ export default function Marketplace() {
             )}
 
             {/* Products List */}
-            <div className="productsList">
-              {loading ? (
-                <div className="loadingSkeleton">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className="productCardSkeleton">
-                      <div className="skeletonHeader"></div>
-                      <div className="skeletonImage"></div>
-                      <div className="skeletonContent">
-                        <div className="skeletonLine"></div>
-                        <div className="skeletonLine"></div>
-                        <div className="skeletonLine"></div>
-                      </div>
-                      <div className="skeletonActions">
-                        <div className="skeletonButton"></div>
-                        <div className="skeletonButton"></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : products.length === 0 ? (
-                <div className="noProducts">No products found</div>
-              ) : (
-                (products.filter((p) => {
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+                <div className="w-10 h-10 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                <p className="font-medium animate-pulse">Loading amazing items...</p>
+              </div>
+            ) : products.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
+                <div className="text-4xl mb-4">📦</div>
+                <h3 className="text-lg font-semibold text-gray-800">No products found</h3>
+                <p className="text-gray-500 text-sm mt-1">Try adjusting your filters or search terms</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {(products.filter((p) => {
                   const q = debouncedSearchQuery.toLowerCase();
                   if (!q) return true;
                   const name = (p.productName || "").toLowerCase();
@@ -787,17 +787,17 @@ export default function Marketplace() {
                   const location = (p.location || "").toLowerCase();
                   return name.includes(q) || category.includes(q) || type.includes(q) || location.includes(q);
                 })).map(product => (
-                  <ProductCard 
-                    key={`${product._id}-${product.updatedAt || product.createdAt}`} 
-                    product={product} 
-                    user={user} 
+                  <ProductCard
+                    key={`${product._id}-${product.updatedAt || product.createdAt}`}
+                    product={product}
+                    user={user}
                     isHighlighted={highlightedIds.has(product._id)}
                     onTrackActivity={trackActivity}
                     onProductUpdate={fetchProducts}
                   />
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </>
         );
       case "received":
@@ -813,51 +813,56 @@ export default function Marketplace() {
 
   return (
     <Layout>
-      <div className="marketplace">
-        <div className="marketplaceWrapper">
-          <div className="marketplaceHeader">
-            <h2>Marketplace <br /><h6>Build Your Own Trust</h6>
-</h2> 
-            <div className="headerActions">
-              <div className="marketplaceTabs">
-                <button 
-                  className={`tabButton ${activeTab === "browse" ? "active" : ""}`}
-                  onClick={() => setActiveTab("browse")}
-                >
-                  Browse Products
-                </button>
-                <button 
-                  className={`tabButton ${activeTab === "received" ? "active" : ""}`}
-                  onClick={() => setActiveTab("received")}
-                >
-                  Offers Received
-                </button>
-                <button 
-                  className={`tabButton ${activeTab === "myOffers" ? "active" : ""}`}
-                  onClick={() => setActiveTab("myOffers")}
-                >
-                  My Offers
-                </button>
-                <button 
-                  className={`tabButton ${activeTab === "conversations" ? "active" : ""}`}
-                  onClick={() => setActiveTab("conversations")}
-                >
-                  Conversations
-                </button>
+      <div className="flex w-full min-h-[calc(100vh-50px)] bg-[#f0f2f5]">
+        <div className="flex-[4.5] p-5">
+          <div className="max-w-7xl mx-auto">
+            <div className="bg-white p-6 rounded-2xl shadow-sm mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800 m-0">Marketplace</h2>
+                <h6 className="text-sm font-medium text-gray-500 m-0 mt-1">Build Your Own Trust</h6>
               </div>
-              {activeTab === "browse" && (
-                <button 
-                  className="createProductBtn"
-                  onClick={() => setShowCreateForm(!showCreateForm)}
-                >
-                  {showCreateForm ? "Cancel" : "Create Product"}
-                </button>
-              )}
+              <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                <div className="flex bg-gray-100 p-1 rounded-xl overflow-x-auto no-scrollbar">
+                  <button
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${activeTab === "browse" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                    onClick={() => setActiveTab("browse")}
+                  >
+                    Browse
+                  </button>
+                  <button
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${activeTab === "received" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                    onClick={() => setActiveTab("received")}
+                  >
+                    Offers Received
+                  </button>
+                  <button
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${activeTab === "myOffers" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                    onClick={() => setActiveTab("myOffers")}
+                  >
+                    My Offers
+                  </button>
+                  <button
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${activeTab === "conversations" ? "bg-white text-blue-600 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+                    onClick={() => setActiveTab("conversations")}
+                  >
+                    Conversations
+                  </button>
+                </div>
+                {activeTab === "browse" && (
+                  <button
+                    className="px-5 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors shadow-sm ml-auto md:ml-0"
+                    onClick={() => setShowCreateForm(!showCreateForm)}
+                  >
+                    {showCreateForm ? "Cancel" : "+ Create Product"}
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
 
-          {renderTabContent()}
+            {renderTabContent()}
+          </div>
         </div>
+        <Rightbar />
       </div>
     </Layout>
   );
@@ -901,7 +906,7 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
   const handleViewDetails = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     // Track click activity
     if (onTrackActivity) {
       onTrackActivity(product._id, "click", {
@@ -910,7 +915,7 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
         timestamp: Date.now()
       });
     }
-    
+
     setShowDetails(true);
   }, [product._id, product.productName, onTrackActivity]);
 
@@ -923,7 +928,7 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
         timestamp: Date.now()
       });
     }
-    
+
     setShowMessageBox(prev => !prev);
   }, [product._id, product.productName, onTrackActivity, showMessageBox]);
 
@@ -937,10 +942,10 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
       await apiClient.delete(`/products/${product._id}`, {
         data: { userId: user._id }
       });
-      
+
       alert("Product deleted successfully");
       setShowDetails(false);
-      
+
       // Refresh products list if callback provided
       if (onProductUpdate) {
         onProductUpdate();
@@ -958,29 +963,29 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
 
   const handleEditProduct = useCallback(async (e) => {
     e.preventDefault();
-    
+
     if (!editFormData) return;
-    
+
     try {
       setEditing(true);
-      
+
       const updateData = {
         ...editFormData,
         userId: user._id,
       };
-      
+
       // Only update validTill if it's provided
       if (editFormData.validTill) {
         updateData.validTill = new Date(editFormData.validTill).toISOString();
       }
-      
+
       await apiClient.put(`/products/${product._id}`, updateData);
-      
+
       alert("Product updated successfully");
       setShowEditForm(false);
       setShowDetails(false);
       setEditFormData(null);
-      
+
       // Refresh products list if callback provided
       if (onProductUpdate) {
         onProductUpdate();
@@ -999,33 +1004,33 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
   const handleEditImageUpload = useCallback(async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
-    
+
     try {
       const uploadedImages = [];
-      
+
       for (const file of files) {
         if (!file.type.startsWith('image/')) {
           alert(`${file.name} is not an image file.`);
           continue;
         }
-        
+
         if (file.size > 5 * 1024 * 1024) {
           alert(`${file.name} is too large. Maximum size is 5MB.`);
           continue;
         }
-        
+
         const formData = new FormData();
         formData.append("file", file);
-        
+
         const res = await apiClient.post("/upload", formData, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
-        
+
         if (res.status === 200 && res.data?.filename) {
           uploadedImages.push(`/images/${res.data.filename}`);
         }
       }
-      
+
       if (uploadedImages.length > 0) {
         setEditFormData(prev => ({
           ...prev,
@@ -1104,12 +1109,12 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
 
   return (
     <div>
-       {/* Product Details Modal */}
-       {showDetails && (
+      {/* Product Details Modal */}
+      {showDetails && (
         <div className="productDetailsModal" onClick={handleModalClose}>
           <div className="modalContent" onClick={handleModalContentClick}>
-           <div>  <button className="closeModal" onClick={handleModalClose}>×</button></div>
-            
+            <div>  <button className="closeModal" onClick={handleModalClose}>×</button></div>
+
             {/* Modal Header */}
             <div className="modalHeader">
               <h2>
@@ -1133,7 +1138,7 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                 <span className="modalProductBadge">{product.location}</span>
               </div>
             </div>
-            
+
             {/* Modal Body */}
             <div className="modalBody">
               {/* Large Image Gallery */}
@@ -1148,9 +1153,9 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                     });
                     return (
                       <div key={index} className="modalImageContainer">
-                        <img 
-                          src={imageUrl} 
-                          alt={`Product ${index + 1}`} 
+                        <img
+                          src={imageUrl}
+                          alt={`Product ${index + 1}`}
                           className="modalImage"
                           onError={(e) => {
                             console.error(`❌ Failed to load product image ${index + 1}:`, {
@@ -1160,11 +1165,11 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                               productName: product.productName,
                               baseUrl: process.env.REACT_APP_PUBLIC_FOLDER || "http://localhost:8800"
                             });
-                            
+
                             // Try alternative URL constructions
                             const baseUrl = getImageBaseUrl();
                             let altUrl;
-                            
+
                             if (image.startsWith('http')) {
                               altUrl = image;
                             } else if (image.startsWith('/images/')) {
@@ -1174,7 +1179,7 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                             } else {
                               altUrl = `${baseUrl}/images/${image}`;
                             }
-                            
+
                             if (e.target.src !== altUrl && altUrl !== imageUrl) {
                               console.log(`🔄 Trying alternative URL:`, altUrl);
                               e.target.src = altUrl;
@@ -1197,7 +1202,7 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                   })}
                 </div>
               )}
-              
+
               <div className="modalProductInfo">
                 <div className="infoSection">
                   <h3>📋 Product Details</h3>
@@ -1224,9 +1229,9 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                     <span className="infoLabel">Listing Type</span>
                     <span className="infoValue">{product.productFor}</span>
                   </div>
-                
-                
-                  
+
+
+
                   {product.productType !== "Brandnew" && (
                     <>
                       <div className="infoRow">
@@ -1244,7 +1249,7 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                     </>
                   )}
                 </div>
-                
+
                 <div className="infoSection">
                   <h3>💰 Pricing & Exchange</h3>
                   {product.productFor === "Sale" && (
@@ -1263,27 +1268,27 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                       </div>
                     </>
                   )}
-                  
+
                   {product.productFor === "Giveaway" && (
                     <div className="infoRow">
                       <span className="infoLabel">Desired in Return</span>
                       <span className="infoValue">{product.desiredProduct}</span>
                     </div>
                   )}
-                  
+
                   {product.productFor === "Exchange" && (
                     <div className="infoRow">
                       <span className="infoLabel">Looking to Exchange For</span>
                       <span className="infoValue">{product.exchangeFor}</span>
                     </div>
                   )}
-                  
+
                   <div className="infoRow">
                     <span className="infoLabel">Claim Method</span>
                     <span className="infoValue">{product.claimThrough}</span>
                   </div>
                 </div>
-                
+
                 <div className="infoSection">
                   <h3>📞 Contact & Timeline</h3>
                   <div className="infoRow">
@@ -1315,14 +1320,14 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                 </div>
               </div>
             </div>
-            
+
             {/* Modal Footer */}
             <div className="modalFooter">
               <div className="modalActions">
                 {/* Owner Actions */}
                 {product.userId?._id === user._id && (
                   <>
-                    <button 
+                    <button
                       className="editBtn"
                       onClick={() => {
                         setShowEditForm(true);
@@ -1351,7 +1356,7 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                     >
                       ✏️ Edit Product
                     </button>
-                    <button 
+                    <button
                       className="deleteBtn"
                       onClick={handleDeleteProduct}
                       disabled={deleting}
@@ -1360,10 +1365,10 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                     </button>
                   </>
                 )}
-                
+
                 {/* Non-Owner Actions */}
                 {product.userId?._id !== user._id && product.status === "Active" && (
-                  <button 
+                  <button
                     className="messageBtn"
                     onClick={() => {
                       setShowDetails(false);
@@ -1373,8 +1378,8 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                     {product.productFor === "Giveaway" ? "🎁 Claim Product" : "💬 Message Seller"}
                   </button>
                 )}
-                
-                <button 
+
+                <button
                   className="shareBtn"
                   onClick={() => {
                     if (navigator.share) {
@@ -1442,7 +1447,7 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                   </select>
                 </div>
               </div>
-              
+
               <div className="formRow">
                 <div className="formGroup">
                   <label>Product Type *</label>
@@ -1599,8 +1604,8 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                 <button type="submit" className="saveBtn" disabled={editing}>
                   {editing ? "Saving..." : "💾 Save Changes"}
                 </button>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="cancelBtn"
                   onClick={() => {
                     setShowEditForm(false);
@@ -1615,150 +1620,150 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
         </div>
       )}
 
-    <div className={`productCard${isHighlighted ? " highlighted" : ""}`}>
-      {/* Relevance Score and Activity Stats - Top of Card */}
-      {product.relevanceScore !== undefined && product.relevanceScore > 0 && (
-        <div className="topRelevanceScore">
-          <div className={`relevanceScore ${getRelevanceScoreClass(product.relevanceScore)}`}>
-            🔥 {product.relevanceScore.toFixed(1)}
-            {product.activityCounts && (
-              <div className="activityStats">
-                {product.activityCounts.view}v • {product.activityCounts.click}c • {product.activityCounts.offer}o
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-      
-      <div className="productHeader">
-        <img 
-          src={product.userId?.profilePicture || "/assets/person/noAvatar.png"} 
-          alt="" 
-          className="productUserImg" 
-          onError={(e) => { e.target.src = "/assets/person/noAvatar.png"; }}
-        />
-        <span className="productUsername">{product.userId?.username}</span>
-        <span className="productType">{product.productFor}</span>
-        <span 
-          className="productStatus"
-          style={{ backgroundColor: getStatusColor(product.status) }}
-        >
-          {product.status}
-        </span>
-      </div>
-      
-      {/* Product Name */}
-      <div className="productTitle">
-        <h3>{product.productName}</h3>
-      </div>
-      
-      {/* Product Images */}
-      {product.productImages && product.productImages.length > 0 ? (
-        <div className="productImages">
-          <div className="imageGrid">
-            <img 
-              src={getImageUrl(product.productImages[0])} 
-              alt="Product" 
-              onClick={handleViewDetails}
-              onError={(e) => {
-                console.error("❌ Failed to load product card image:", {
-                  originalPath: product.productImages[0],
-                  attemptedUrl: getImageUrl(product.productImages[0]),
-                  productId: product._id,
-                  productName: product.productName,
-                  baseUrl: process.env.REACT_APP_PUBLIC_FOLDER || "http://localhost:8800"
-                });
-                
-                // Try alternative URL constructions
-                const baseUrl = getImageBaseUrl();
-                const image = product.productImages[0];
-                let altUrl;
-                
-                if (image.startsWith('http')) {
-                  altUrl = image;
-                } else if (image.startsWith('/images/')) {
-                  altUrl = `${baseUrl}${image}`;
-                } else if (image.startsWith('/')) {
-                  altUrl = `${baseUrl}/images${image}`;
-                } else {
-                  altUrl = `${baseUrl}/images/${image}`;
-                }
-                
-                if (e.target.src !== altUrl && altUrl !== getImageUrl(image)) {
-                  console.log(`🔄 Trying alternative URL for card:`, altUrl);
-                  e.target.src = altUrl;
-                } else {
-                  // Final fallback - use default image
-                  console.warn(`⚠️ All URL attempts failed for card, using default image`);
-                  setImageLoadError(true);
-                  e.target.src = getImageUrl("post/1.jpeg");
-                  e.target.onerror = null; // Prevent infinite loop
-                }
-              }}
-              onLoad={() => {
-                console.log("✅ Product card image loaded:", getImageUrl(product.productImages[0]));
-              }}
-            />
-            {product.productImages.length > 1 && (
-              <div className="moreImagesOverlay" onClick={handleViewDetails}>
-                <span>+{product.productImages.length - 1} more</span>
-              </div>
-            )}
-            {/* Image count indicator */}
-            <div className="imageCountIndicator">
-              {product.productImages.length} image{product.productImages.length !== 1 ? 's' : ''}
+      <div className={`productCard${isHighlighted ? " highlighted" : ""}`}>
+        {/* Relevance Score and Activity Stats - Top of Card */}
+        {product.relevanceScore !== undefined && product.relevanceScore > 0 && (
+          <div className="topRelevanceScore">
+            <div className={`relevanceScore ${getRelevanceScoreClass(product.relevanceScore)}`}>
+              🔥 {product.relevanceScore.toFixed(1)}
+              {product.activityCounts && (
+                <div className="activityStats">
+                  {product.activityCounts.view}v • {product.activityCounts.click}c • {product.activityCounts.offer}o
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="productImages">
-          <div className="imageGrid">
-            <img 
-              src="/assets/post/1.jpeg" 
-              alt="Default Product" 
-              className="productImage"
-              onClick={handleViewDetails}
-            />
-            <div className="noImageOverlay">
-              <span>No Image Available</span>
-            </div>
-          </div>
-        </div>
-      )}
-      
+        )}
 
-      <div  className="productActions">
-        <button 
-          className="viewDetailsBtn"
-          onClick={handleViewDetails}
-        >
-          👁️ View Details
-        </button>
-        
-        {product.userId?._id !== user._id && product.status === "Active" && (
-          <button 
-            className="messageBtn"
-            onClick={handleMessageBoxToggle}
+        <div className="productHeader">
+          <img
+            src={product.userId?.profilePicture || "/assets/person/noAvatar.png"}
+            alt=""
+            className="productUserImg"
+            onError={(e) => { e.target.src = "/assets/person/noAvatar.png"; }}
+          />
+          <span className="productUsername">{product.userId?.username}</span>
+          <span className="productType">{product.productFor}</span>
+          <span
+            className="productStatus"
+            style={{ backgroundColor: getStatusColor(product.status) }}
           >
-            {product.productFor === "Giveaway" ? "🎁 Claim Product" : "💬 Message Seller"}
+            {product.status}
+          </span>
+        </div>
+
+        {/* Product Name */}
+        <div className="productTitle">
+          <h3>{product.productName}</h3>
+        </div>
+
+        {/* Product Images */}
+        {product.productImages && product.productImages.length > 0 ? (
+          <div className="productImages">
+            <div className="imageGrid">
+              <img
+                src={getImageUrl(product.productImages[0])}
+                alt="Product"
+                onClick={handleViewDetails}
+                onError={(e) => {
+                  console.error("❌ Failed to load product card image:", {
+                    originalPath: product.productImages[0],
+                    attemptedUrl: getImageUrl(product.productImages[0]),
+                    productId: product._id,
+                    productName: product.productName,
+                    baseUrl: process.env.REACT_APP_PUBLIC_FOLDER || "http://localhost:8800"
+                  });
+
+                  // Try alternative URL constructions
+                  const baseUrl = getImageBaseUrl();
+                  const image = product.productImages[0];
+                  let altUrl;
+
+                  if (image.startsWith('http')) {
+                    altUrl = image;
+                  } else if (image.startsWith('/images/')) {
+                    altUrl = `${baseUrl}${image}`;
+                  } else if (image.startsWith('/')) {
+                    altUrl = `${baseUrl}/images${image}`;
+                  } else {
+                    altUrl = `${baseUrl}/images/${image}`;
+                  }
+
+                  if (e.target.src !== altUrl && altUrl !== getImageUrl(image)) {
+                    console.log(`🔄 Trying alternative URL for card:`, altUrl);
+                    e.target.src = altUrl;
+                  } else {
+                    // Final fallback - use default image
+                    console.warn(`⚠️ All URL attempts failed for card, using default image`);
+                    setImageLoadError(true);
+                    e.target.src = getImageUrl("post/1.jpeg");
+                    e.target.onerror = null; // Prevent infinite loop
+                  }
+                }}
+                onLoad={() => {
+                  console.log("✅ Product card image loaded:", getImageUrl(product.productImages[0]));
+                }}
+              />
+              {product.productImages.length > 1 && (
+                <div className="moreImagesOverlay" onClick={handleViewDetails}>
+                  <span>+{product.productImages.length - 1} more</span>
+                </div>
+              )}
+              {/* Image count indicator */}
+              <div className="imageCountIndicator">
+                {product.productImages.length} image{product.productImages.length !== 1 ? 's' : ''}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="productImages">
+            <div className="imageGrid">
+              <img
+                src="/assets/post/1.jpeg"
+                alt="Default Product"
+                className="productImage"
+                onClick={handleViewDetails}
+              />
+              <div className="noImageOverlay">
+                <span>No Image Available</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+
+        <div className="productActions">
+          <button
+            className="viewDetailsBtn"
+            onClick={handleViewDetails}
+          >
+            👁️ View Details
           </button>
+
+          {product.userId?._id !== user._id && product.status === "Active" && (
+            <button
+              className="messageBtn"
+              onClick={handleMessageBoxToggle}
+            >
+              {product.productFor === "Giveaway" ? "🎁 Claim Product" : "💬 Message Seller"}
+            </button>
+          )}
+        </div>
+
+
+
+        {/* Product Message Box */}
+        {showMessageBox && (
+          <ProductMessageBox
+            product={product}
+            otherUser={product.userId}
+            currentUser={user}
+            isOpen={showMessageBox}
+            onClose={() => setShowMessageBox(false)}
+            onMessageSent={handleMessageSent}
+          />
         )}
       </div>
-
-    
-
-      {/* Product Message Box */}
-      {showMessageBox && (
-        <ProductMessageBox
-          product={product}
-          otherUser={product.userId}
-          currentUser={user}
-          isOpen={showMessageBox}
-          onClose={() => setShowMessageBox(false)}
-          onMessageSent={handleMessageSent}
-        />
-      )}
-    </div>
     </div>
   );
 });

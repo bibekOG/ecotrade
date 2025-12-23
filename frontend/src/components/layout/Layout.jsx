@@ -1,19 +1,15 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
-import Header from "../header/Header";
+import Topbar from "../topbar/Topbar";
 import Sidebar from "../sidebar/Sidebar";
-import "./layout.css";
 
 export default function Layout({ children }) {
-  const location = useLocation();
-  const isCompactLayout = location.pathname === "/messenger" || location.pathname === "/trade";
 
   return (
     <>
-      <Header />
-      <div className={`layoutContainer ${isCompactLayout ? "compact" : ""}`}>
-        <Sidebar compact={isCompactLayout} />
-        <div className="mainContent">
+      <Topbar />
+      <div className={`flex w-full min-h-[calc(100vh-56px)] pt-[50px] bg-[#f0f2f5]`}>
+        <Sidebar />
+        <div className="flex-1 flex flex-col">
           {children}
         </div>
       </div>

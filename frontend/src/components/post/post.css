@@ -1,27 +1,27 @@
 .post {
   width: 100%;
-  border-radius: 15px;
+  border-radius: 10px;
   background: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  margin: 25px 0;
-  border: 1px solid #f0f0f0;
-  transition: all 0.3s ease;
-  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  border: none;
+  overflow: visible;
+  /* To allow tooltips/popups if needed */
 }
 
 .post:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
 }
 
 .postWrapper {
-  padding: 20px;
+  padding: 15px;
 }
 
 .postTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .postTopLeft {
@@ -30,111 +30,77 @@
 }
 
 .postProfileImg {
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #f0f0f0;
-  transition: all 0.3s ease;
-}
-
-.postProfileImg:hover {
-  border-color: #667eea;
+  background-color: #f0f2f5;
 }
 
 .postUsername {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  margin: 0 12px;
-  color: #333;
+  margin: 0 10px;
+  color: #050505;
 }
 
-.postDate{
-    font-size: 13px;
-    color: #8899a6;
-    font-weight: 500;
+.postDate {
+  font-size: 13px;
+  color: #65676b;
 }
 
-.postCenter{
-    margin: 20px 0;
+.postCenter {
+  margin: 10px 0 20px 0;
 }
 
 .postText {
-  line-height: 1.5;
+  color: #050505;
+  font-size: 15px;
 }
 
-/* Post Tags */
-.postTag {
-  background: #e8f5fe;
-  color: #1da1f2;
-  padding: 2px 6px;
-  border-radius: 12px;
-  font-weight: 500;
-  font-size: 14px;
-  margin: 0 2px;
-  display: inline-block;
-  transition: all 0.2s ease;
+.postImg {
+  margin-top: 10px;
+  width: 100%;
+  max-height: 600px;
+  object-fit: contain;
+  background-color: #f0f2f5;
+  border-radius: 2px;
 }
 
-.postTag:hover {
-  background: #1da1f2;
-  color: white;
-  cursor: pointer;
+.postBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid #f0f2f5;
+  margin-top: 10px;
 }
 
-.updatePost{
-  color:white;
-  padding:10px 20px;
-  align-self:center;
-  border:none;
-  margin-left:20px;
-  border-radius:3px;
-  background-color:#1877f2;
-  cursor:pointer;
-}
-.postTopRight{
+.postBottomLeft {
   display: flex;
   align-items: center;
 }
-.edit{
-  border: 0.5px solid gray;
-  padding:5px 10px;
-  border-radius: 5px;;
-  color:gray;
-  cursor:pointer;
+
+.likeIcon {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  cursor: pointer;
 }
 
-.postImg{
-    margin-top: 20px;
-    width: 100%;
-    max-height: 500px;
-    object-fit: contain;
+.postLikeCounter {
+  font-size: 14px;
+  color: #65676b;
 }
 
-.postBottom{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.postCommentText {
+  cursor: pointer;
+  font-size: 14px;
+  color: #65676b;
 }
 
-.postBottomLeft{
-    display: flex;
-    align-items: center;   
+.postCommentText:hover {
+  text-decoration: underline;
 }
 
-.likeIcon{
-    width: 24px;
-    height: 24px;
-    margin-right: 5px;
-    cursor: pointer;
-}
-
-.postLikeCounter{
-    font-size: 15px;
-}
-
-.postCommentText{
-    cursor: pointer;
-    border-bottom: 1px dashed gray;
-    font-size: 15px;
-}
+/* Action buttons area (Like, Comment, Share) could be added here later */

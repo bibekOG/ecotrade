@@ -231,56 +231,90 @@
     width: 95%;
     height: 95%;
   }
-  
+
   .formRow {
     gap: 15px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .register {
+    height: auto;
+    min-height: 100vh;
+    padding: 20px 0;
+    overflow-y: auto;
+  }
+
   .registerWrapper {
-    width: 95%;
-    height: 95%;
     flex-direction: column;
+    width: 95%;
+    height: auto;
+    overflow: visible;
   }
-  
+
   .registerLeft {
-    padding: 20px;
+    padding: 30px;
+    flex: 0 0 auto;
     text-align: center;
+    border-radius: 20px 20px 0 0;
   }
-  
+
+  .registerRight {
+    flex: 1 0 auto;
+    overflow-y: visible;
+    border-radius: 0 0 20px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .register {
+    padding: 0;
+  }
+
+  .registerWrapper {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .registerLeft {
+    padding: 30px 20px;
+    border-radius: 0;
+  }
+
   .registerLogo {
-    font-size: 36px;
+    font-size: 32px;
   }
-  
+
   .registerDesc {
     font-size: 16px;
   }
-  
+
   .registerRight {
-    padding: 20px;
-    flex: 1;
+    padding: 30px 20px;
+    border-radius: 0;
   }
-  
+
   .formRow {
     grid-template-columns: 1fr;
     gap: 15px;
   }
-  
+
   .registerTitle {
     font-size: 24px;
   }
-  
+
   .registerInput {
     padding: 12px;
     font-size: 14px;
   }
-  
+
   .uploadButton {
     padding: 12px 20px;
     font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
   }
-  
+
   .registerButton {
     padding: 12px;
     font-size: 16px;
@@ -288,32 +322,22 @@
 }
 
 @media (max-width: 480px) {
-  .register {
-    padding: 10px;
-  }
-  
-  .registerWrapper {
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-  }
-  
   .registerLeft {
-    padding: 15px;
+    padding: 20px;
   }
-  
+
   .registerRight {
-    padding: 15px;
+    padding: 20px;
   }
-  
+
   .registerLogo {
     font-size: 28px;
   }
-  
+
   .registerDesc {
     font-size: 14px;
   }
-  
+
   .registerTitle {
     font-size: 20px;
   }
