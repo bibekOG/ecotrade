@@ -1,5 +1,7 @@
 ﻿const express = require("express");
 const app = express();
+const http = require("http");
+const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
@@ -24,6 +26,8 @@ const adsRoute = require('./routes/ads')
 const productActivitiesRoute = require('./routes/productActivities')
 const notificationsRoute = require('./routes/notifications')
 const searchRoute = require('./routes/search')
+const { initializeSocket, setupNotificationHandlers } = require("./socket/notificationSocket");
+
 const router = express.Router();
 
 dotenv.config();
@@ -134,7 +138,27 @@ app.use("/api/productActivities", productActivitiesRoute)
 app.use("/api/notifications", notificationsRoute)
 app.use("/api/search", searchRoute)
 
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Configure this appropriately for production
+  },
+});
+
+initializeSocket(io);
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  
+  // Setup notification handlers
+  setupNotificationHandlers(socket);
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
+
 const PORT = process.env.PORT || 8800;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Backend server is running on port ${PORT}!`);
 });
