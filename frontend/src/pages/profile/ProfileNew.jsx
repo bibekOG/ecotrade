@@ -11,11 +11,12 @@ import Layout from '../../components/layout/Layout';
 import Feed from '../../components/feed/Feed';
 import Rightbar from '../../components/rightbar/Rightbar';
 import './ProfileNew.css';
+import { getProfileImageUrl, getCoverImageUrl } from '../../utils/imageUtils';
 
 const ProfileNew = () => {
   const { username } = useParams();
   const history = useHistory();
-  const { user: currentUser } = useContext(AuthContext);
+  const { user: currentUser, dispatch } = useContext(AuthContext);
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,11 +27,10 @@ const ProfileNew = () => {
   const [uploadingProfile, setUploadingProfile] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [editData, setEditData] = useState({});
+  const [followed, setFollowed] = useState(false);
 
   const coverInputRef = useRef(null);
   const profileInputRef = useRef(null);
-
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER || '/assets/';
 
   // Fetch user data
   useEffect(() => {
@@ -56,6 +56,13 @@ const ProfileNew = () => {
 
     fetchUser();
   }, [username, history]);
+
+  // Check if followed
+  useEffect(() => {
+    if (user && currentUser) {
+      setFollowed(currentUser.followings.includes(user._id));
+    }
+  }, [user, currentUser]);
 
   // Fetch friends
   useEffect(() => {
@@ -191,6 +198,32 @@ const ProfileNew = () => {
     }
   };
 
+  // Handle follow/unfollow
+  const handleFollow = async () => {
+    try {
+      if (followed) {
+        await apiClient.put(`/users/${user._id}/unfollow`, {
+          userId: currentUser._id,
+        });
+        dispatch({ type: "UNFOLLOW", payload: user._id });
+        setFollowed(false);
+      } else {
+        await apiClient.put(`/users/${user._id}/follow`, {
+          userId: currentUser._id,
+        });
+        dispatch({ type: "FOLLOW", payload: user._id });
+        setFollowed(true);
+      }
+    } catch (err) {
+      console.error("Error following/unfollowing user:", err);
+    }
+  };
+
+  // Handle message click
+  const handleMessage = () => {
+    history.push(`/messenger?userId=${user._id}`);
+  };
+
   if (loading) {
     return (
       <Layout>
@@ -212,13 +245,8 @@ const ProfileNew = () => {
     );
   }
 
-  const coverImage = user.coverPicture
-    ? `${PF}${user.coverPicture}`
-    : "http://localhost:8800/images/person/noCover.jpg"; // Default cover if none exists
-
-  const profileImage = user.profilePicture
-    ? `${PF}${user.profilePicture}`
-    : "http://localhost:8800/images/person/noAvatar.png";
+  const coverImage = getCoverImageUrl(user.coverPicture);
+  const profileImage = getProfileImageUrl(user.profilePicture);
 
   return (
     <Layout>
@@ -330,13 +358,23 @@ const ProfileNew = () => {
                       </button>
                     ) : (
                       <>
-                        <button className="profile-btn primary">
+                        <button
+                          className={`profile-btn ${followed ? 'secondary' : 'primary'}`}
+                          onClick={handleFollow}
+                        >
                           <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                            {followed ? (
+                              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                            ) : (
+                              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                            )}
                           </svg>
-                          Add Friend
+                          {followed ? 'Unfriend' : 'Add Friend'}
                         </button>
-                        <button className="profile-btn secondary">
+                        <button
+                          className="profile-btn secondary"
+                          onClick={handleMessage}
+                        >
                           <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
                           </svg>
@@ -442,11 +480,7 @@ const ProfileNew = () => {
                             onClick={() => history.push(`/profile/${friend.username}`)}
                           >
                             <img
-                              src={
-                                friend.profilePicture
-                                  ? `${PF}${friend.profilePicture}`
-                                  : `${PF}person/noAvatar.png`
-                              }
+                              src={getProfileImageUrl(friend.profilePicture)}
                               alt={friend.username}
                             />
                             <span>{friend.fullName || friend.username}</span>
@@ -479,7 +513,7 @@ const ProfileNew = () => {
                       <div className="photos-grid">
                         {photos.slice(0, 9).map((photo) => (
                           <div key={photo._id} className="photo-item">
-                            <img src={`${PF}${photo.img}`} alt="" />
+                            <img src={getProfileImageUrl(photo.img)} alt="" />
                           </div>
                         ))}
                       </div>
@@ -546,11 +580,7 @@ const ProfileNew = () => {
                               onClick={() => history.push(`/profile/${friend.username}`)}
                             >
                               <img
-                                src={
-                                  friend.profilePicture
-                                    ? `${PF}${friend.profilePicture}`
-                                    : `${PF}person/noAvatar.png`
-                                }
+                                src={getProfileImageUrl(friend.profilePicture)}
                                 alt={friend.username}
                               />
                               <div className="friend-info">
@@ -571,7 +601,7 @@ const ProfileNew = () => {
                         <div className="photos-full-grid">
                           {photos.map((photo) => (
                             <div key={photo._id} className="photo-card">
-                              <img src={`${PF}${photo.img}`} alt="" />
+                              <img src={getProfileImageUrl(photo.img)} alt="" />
                             </div>
                           ))}
                         </div>

@@ -13,6 +13,7 @@ import {
   Refresh
 } from "@material-ui/icons";
 import "./tradecentre.css";
+import CreateProductForm from "../marketplace/components/CreateProductForm";
 
 export default function TradeCentre() {
   const { user } = useContext(AuthContext);
@@ -32,6 +33,7 @@ export default function TradeCentre() {
   const [selectedClaim, setSelectedClaim] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [showCreateModal, setShowCreateModal] = useState(false); // New state for Create Modal
 
   useEffect(() => {
     if (user) {
@@ -671,8 +673,8 @@ export default function TradeCentre() {
     }
 
     return (
-      <div className="tableContainer">
-        <table className="myOffersTable">
+      <div className="tableContainer overflow-x-auto">
+        <table className="myOffersTable w-full">
           <thead>
             <tr>
               <th>Product</th>
@@ -1006,14 +1008,23 @@ export default function TradeCentre() {
                     <h2 className="!text-start">Trade Centre</h2>
                     <p>Manage all your marketplace activities in one place</p>
                   </div>
-                  <button
-                    className="refreshBtn !py-2 !bg-blue-600 !text-white"
-                    onClick={handleRefreshData}
-                    disabled={loading}
-                  >
-                    <Refresh style={{ fontSize: 18, marginRight: 5 }} />
-                    {loading ? "Refreshing..." : "Refresh Data"}
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      className="refreshBtn !py-2 !bg-green-600 !text-white !border-green-600 hover:!bg-green-700"
+                      onClick={() => setShowCreateModal(true)}
+                    >
+                      <span className="text-xl mr-1">+</span>
+                      Add Listing
+                    </button>
+                    <button
+                      className="refreshBtn !py-2 !bg-blue-600 !text-white"
+                      onClick={handleRefreshData}
+                      disabled={loading}
+                    >
+                      <Refresh style={{ fontSize: 18, marginRight: 5 }} />
+                      {loading ? "Refreshing..." : "Refresh Data"}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -1221,6 +1232,32 @@ export default function TradeCentre() {
               >
                 Confirm Accept
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Listing Modal */}
+      {showCreateModal && (
+        <div className="modal">
+          <div className="modalContent !max-w-4xl !w-[95%] !p-0 overflow-hidden">
+            <div className="relative h-full overflow-y-auto max-h-[90vh]">
+              <button
+                className="closeBtn absolute right-4 top-4 z-50 bg-white shadow-md hover:bg-gray-100"
+                onClick={() => setShowCreateModal(false)}
+              >
+                ×
+              </button>
+              <div className="p-4">
+                <CreateProductForm
+                  user={user}
+                  onProductCreated={() => {
+                    fetchData();
+                    setShowCreateModal(false);
+                  }}
+                  onCancel={() => setShowCreateModal(false)}
+                />
+              </div>
             </div>
           </div>
         </div>

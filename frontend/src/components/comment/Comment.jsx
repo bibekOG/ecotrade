@@ -1,31 +1,30 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import apiClient from "../../utils/apiClient";
 import { AuthContext } from "../../context/AuthContext";
 import { format } from "timeago.js";
 import "./comment.css";
 
-export default function Comment({ postId, onCommentAdded }) {
+export default function Comment({ postId, onCommentAdded, open }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const [showComments, setShowComments] = useState(false);
   const [loading, setLoading] = useState(false);
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER || "http://localhost:8800/images/";
 
-  useEffect(() => {
-    if (showComments) {
-      fetchComments();
-    }
-  }, [showComments, postId]);
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       const res = await apiClient.get(`/comments/${postId}`);
       setComments(res.data);
     } catch (err) {
       console.error("Error fetching comments:", err);
     }
-  };
+  }, [postId]);
+
+  useEffect(() => {
+    if (open) {
+      fetchComments();
+    }
+  }, [open, fetchComments]);
 
   const handleSubmitComment = async (e) => {
     e.preventDefault();
@@ -38,7 +37,7 @@ export default function Comment({ postId, onCommentAdded }) {
         userId: user._id,
         text: newComment,
       });
-      
+
       setNewComment("");
       fetchComments();
       if (onCommentAdded) {
@@ -70,24 +69,17 @@ export default function Comment({ postId, onCommentAdded }) {
     if (!profilePicture) {
       return `${PF}person/noAvatar.png`;
     }
-    
+
     if (profilePicture.startsWith('http://') || profilePicture.startsWith('https://')) {
       return profilePicture;
     }
-    
+
     return `${PF}${profilePicture}`;
   };
 
   return (
     <div className="commentSection">
-      <button
-        className="showCommentsBtn"
-        onClick={() => setShowComments(!showComments)}
-      >
-        {showComments ? "Hide Comments" : "Show Comments"}
-      </button>
-
-      {showComments && (
+      {open && (
         <div className="commentsContainer">
           {/* Comment Form */}
           <form className="commentForm" onSubmit={handleSubmitComment}>
