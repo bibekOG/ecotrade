@@ -6,6 +6,7 @@ import { format } from "timeago.js";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import Comment from "../comment/Comment";
+import { getImageUrl, getProfileImageUrl } from "../../utils/imageUtils";
 
 export default function Post({ post }) {
   const [like, setLike] = useState(post.likes.length);
@@ -157,11 +158,7 @@ export default function Post({ post }) {
     return parts;
   };
 
-  const getProfilePictureUrl = (profilePicture) => {
-    if (!profilePicture) return `${PF}person/noAvatar.png`;
-    if (profilePicture.startsWith('http')) return profilePicture;
-    return `${PF}${profilePicture}`;
-  };
+
 
   const handleCommentAdded = () => {
     window.location.reload();
@@ -175,9 +172,9 @@ export default function Post({ post }) {
             <Link to={`/profile/${user.username}`}>
               <img
                 className="postProfileImg"
-                src={getProfilePictureUrl(user.profilePicture)}
+                src={getProfileImageUrl(user.profilePicture)}
                 alt="Profile"
-                onError={(e) => { e.target.src = `${PF}person/noAvatar.png`; }}
+                onError={(e) => { e.target.src = getProfileImageUrl("person/noAvatar.png"); }}
               />
             </Link>
             <div className="postInfo">
@@ -239,7 +236,7 @@ export default function Post({ post }) {
               {post.img && (
                 <img
                   className="postImg"
-                  src={post.img.startsWith('http') ? post.img : `${PF}${post.img}`}
+                  src={getImageUrl(post.img)}
                   alt=""
                   onError={(e) => { e.target.style.display = 'none'; }}
                 />

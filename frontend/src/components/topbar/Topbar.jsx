@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import apiClient from "../../utils/apiClient";
+import { getProfileImageUrl } from "../../utils/imageUtils";
 
 export default function Topbar() {
   const { user, dispatch } = useContext(AuthContext);
@@ -154,10 +155,10 @@ export default function Topbar() {
         {/* Profile Pic */}
         <Link to={`/profile/${user?.username}`} className="flex items-center">
           <img
-            src={user?.profilePicture ? (user.profilePicture.startsWith('http') ? user.profilePicture : PF + user.profilePicture) : PF + "person/noAvatar.png"}
+            src={getProfileImageUrl(user?.profilePicture)}
             alt=""
             className="w-10 h-10 rounded-full object-cover border border-gray-200 ml-2 cursor-pointer bg-gray-200"
-            onError={(e) => { e.target.src = PF + "person/noAvatar.png"; }}
+            onError={(e) => { e.target.src = getProfileImageUrl("person/noAvatar.png"); }}
           />
         </Link>
       </div>

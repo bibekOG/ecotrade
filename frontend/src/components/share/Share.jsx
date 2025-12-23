@@ -10,6 +10,7 @@ import {
 import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import apiClient from "../../utils/apiClient";
+import { getProfileImageUrl } from "../../utils/imageUtils";
 
 export default function Share() {
   const { user } = useContext(AuthContext);
@@ -109,31 +110,16 @@ export default function Share() {
     } catch (err) { }
   };
 
-  // Function to get profile picture URL
-  const getProfilePictureUrl = (profilePicture) => {
-    if (!profilePicture) {
-      return `${PF}person/noAvatar.png`;
-    }
-
-    // If it's already a full URL (starts with http/https)
-    if (profilePicture.startsWith('http://') || profilePicture.startsWith('https://')) {
-      return profilePicture;
-    }
-
-    // If it's a relative path, prepend the public folder
-    return `${PF}${profilePicture}`;
-  };
-
   return (
     <div className="share">
       <div className="shareWrapper">
         <div className="shareTop">
           <img
             className="shareProfileImg"
-            src={getProfilePictureUrl(user.profilePicture)}
+            src={getProfileImageUrl(user.profilePicture)}
             alt="Profile"
             onError={(e) => {
-              e.target.src = `${PF}person/noAvatar.png`;
+              e.target.src = getProfileImageUrl("person/noAvatar.png");
             }}
           />
           <div className="shareInputContainer">
@@ -249,4 +235,3 @@ export default function Share() {
     </div>
   );
 }
-

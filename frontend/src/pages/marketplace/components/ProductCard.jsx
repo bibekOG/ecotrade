@@ -723,10 +723,10 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                     <div>
 
                         <img
-                            src={product.userId?.profilePicture || "/assets/person/noAvatar.png"}
+                            src={getProfileImageUrl(product.userId?.profilePicture)}
                             alt=""
                             className="productUserImg"
-                            onError={(e) => { e.target.src = "/assets/person/noAvatar.png"; }}
+                            onError={(e) => { e.target.src = getProfileImageUrl("person/noAvatar.png"); }}
                         />
                         <span className="productUsername">{product.userId?.username}</span>
                     </div>

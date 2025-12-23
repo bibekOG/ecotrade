@@ -1,15 +1,16 @@
 import { useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { Person, Description, Store } from "@material-ui/icons";
+import { getImageUrl, getProfileImageUrl } from "../../utils/imageUtils";
 import "./searchResults.css";
 
-export default function SearchResults({ 
-  results, 
-  loading, 
-  searchQuery, 
-  show, 
+export default function SearchResults({
+  results,
+  loading,
+  searchQuery,
+  show,
   onClose,
-  onResultClick 
+  onResultClick
 }) {
   const resultsRef = useRef(null);
   const history = useHistory();
@@ -61,11 +62,11 @@ export default function SearchResults({
           <div className="resultIconWrapper userIcon">
             {result.profilePicture ? (
               <img
-                src={result.profilePicture.startsWith("http") ? result.profilePicture : PF + result.profilePicture}
+                src={getProfileImageUrl(result.profilePicture)}
                 alt={result.username}
                 className="resultAvatar"
                 onError={(e) => {
-                  e.target.src = PF + "person/noAvatar.png";
+                  e.target.src = getProfileImageUrl("person/noAvatar.png");
                 }}
               />
             ) : (
@@ -111,7 +112,7 @@ export default function SearchResults({
           </div>
           {result.img && (
             <img
-              src={result.img.startsWith("http") ? result.img : PF + result.img}
+              src={getImageUrl(result.img)}
               alt="Post"
               className="resultPostImage"
               onError={(e) => {
@@ -147,7 +148,7 @@ export default function SearchResults({
           </div>
           {result.productImages && result.productImages[0] && (
             <img
-              src={result.productImages[0].startsWith("http") ? result.productImages[0] : PF + result.productImages[0]}
+              src={getImageUrl(result.productImages[0])}
               alt={result.productName}
               className="resultProductImage"
               onError={(e) => {

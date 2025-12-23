@@ -3,6 +3,7 @@ import apiClient from "../../utils/apiClient";
 import { AuthContext } from "../../context/AuthContext";
 import Layout from "../../components/layout/Layout";
 import Rightbar from "../../components/rightbar/Rightbar";
+import { getProfileImageUrl } from "../../utils/imageUtils";
 import "./friends.css";
 
 export default function Friends() {
@@ -218,7 +219,7 @@ export default function Friends() {
                         {searchResults.map(userResult => (
                           <div key={userResult._id} className="userCard">
                             <img
-                              src={userResult.profilePicture || "/assets/person/noAvatar.png"}
+                              src={getProfileImageUrl(userResult.profilePicture)}
                               alt=""
                               className="cardAvatar"
                               onClick={() => handleViewProfile(userResult.username)}
@@ -261,7 +262,7 @@ export default function Friends() {
                       {friends.map(friend => (
                         <div key={friend._id} className="userCard">
                           <img
-                            src={friend.profilePicture || "/assets/person/noAvatar.png"}
+                            src={getProfileImageUrl(friend.profilePicture)}
                             alt=""
                             className="cardAvatar"
                             onClick={() => handleViewProfile(friend.username)}
@@ -304,7 +305,7 @@ export default function Friends() {
                       {pendingRequests.map(request => (
                         <div key={request._id} className="userCard">
                           <img
-                            src={request.sender.profilePicture || "/assets/person/noAvatar.png"}
+                            src={getProfileImageUrl(request.sender.profilePicture)}
                             alt=""
                             className="cardAvatar"
                             onClick={() => handleViewProfile(request.sender.username)}
@@ -347,7 +348,7 @@ export default function Friends() {
                       {sentRequests.map(request => (
                         <div key={request._id} className="userCard">
                           <img
-                            src={request.receiver.profilePicture || "/assets/person/noAvatar.png"}
+                            src={getProfileImageUrl(request.receiver.profilePicture)}
                             alt=""
                             className="cardAvatar"
                             onClick={() => handleViewProfile(request.receiver.username)}
