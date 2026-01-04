@@ -8,10 +8,10 @@ require("dotenv").config();
 // Sample data arrays
 const sampleUsers = [
   {
-    username: "nirmal_admin",
-    fullName: "Nirmal Admin",
-    email: "nirmal@nirmal.com",
-    password: "nirmal",
+    username: "bibek_admin",
+    fullName: "Bibek",
+    email: "bibek@bibek.com",
+    password: "bibek12",
     contactNumber: "9800000001",
     bio: "System Administrator with full access to manage users, posts, and platform operations.",
     interest: ["Administration", "Technology", "Management", "Security"],
@@ -360,8 +360,8 @@ const seedDatabase = async () => {
 
     console.log("✅ Database seeded successfully!");
     console.log("\n🔐 ADMIN CREDENTIALS:");
-    console.log("Email: nirmal@nirmal.com");
-    console.log("Password: nirmalAdminPassword");
+    console.log("Email: bibek@bibek.com");
+    console.log("Password: bibekAdminPassword");
     console.log("Role: Administrator\n");
     
     console.log("📝 Sample users created:");

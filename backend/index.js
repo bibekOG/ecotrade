@@ -41,14 +41,14 @@ mongoose
     // Ensure default admin exists
     (async () => {
       try {
-        const email = "nirmal@nirmal.com";
-        const plainPassword = "nirmal";
+        const email = "bibek@bibek.com";
+        const plainPassword = "bibek";
         let admin = await User.findOne({ email });
         const hashed = await bcrypt.hash(plainPassword, 10);
         if (!admin) {
           admin = new User({
-            username: "nirmal",
-            fullName: "Nirmal Admin",
+            username: "bibek",
+            fullName: "Bibek Admin",
             email,
             contactNumber: "0000000000",
             bio: "System administrator",
