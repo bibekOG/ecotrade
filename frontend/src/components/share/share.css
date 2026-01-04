@@ -1,203 +1,219 @@
 .share {
   width: 100%;
-  border-radius: 15px;
-  background: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #f0f0f0;
-  margin-bottom: 25px;
-  transition: all 0.3s ease;
-}
-
-.share:hover {
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
 }
 
 .shareWrapper {
-  padding: 20px;
+  padding: 12px 16px 10px;
 }
 
 .shareTop {
   display: flex;
   align-items: center;
+  margin-bottom: 12px;
 }
 
 .shareProfileImg {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 15px;
-  border: 3px solid #f0f0f0;
-  transition: all 0.3s ease;
+  margin-right: 12px;
+  cursor: pointer;
+  background-color: #f0f2f5;
 }
 
 .shareInputContainer {
-  position: relative;
   flex: 1;
+  position: relative;
 }
 
 .shareInput {
   border: none;
   width: 100%;
-  font-size: 16px;
-  padding: 15px 0;
-  color: #333;
-  background: transparent;
-  resize: none;
-  min-height: 60px;
-}
-
-.shareInput:focus {
+  background-color: #f0f2f5;
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 1.0625rem;
+  color: #050505;
   outline: none;
 }
 
+.shareInput:hover {
+  background-color: #e4e6eb;
+}
+
 .shareInput::placeholder {
-  color: #8899a6;
-  font-size: 16px;
-}
-
-/* Tag Suggestions */
-.tagSuggestions {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #e1e8ed;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.tagSuggestionsHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 15px;
-  border-bottom: 1px solid #e1e8ed;
-  background: #f7f9fa;
-  border-radius: 8px 8px 0 0;
-}
-
-.tagSuggestionsHeader span {
-  font-weight: 600;
-  color: #333;
-}
-
-.closeTags {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  color: #657786;
-  padding: 0;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.closeTags:hover {
-  color: #333;
-}
-
-.tagList {
-  padding: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tagSuggestion {
-  background: #e8f5fe;
-  border: 1px solid #1da1f2;
-  color: #1da1f2;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.tagSuggestion:hover {
-  background: #1da1f2;
-  color: white;
+  color: #65676b;
 }
 
 .shareHr {
-  margin: 20px;
+  margin: 0 16px;
+  height: 1px;
+  background-color: #ced0d4;
+  border: none;
+  opacity: 0.5;
+}
+
+.shareImgContainer {
+  padding: 0 16px 16px;
+  position: relative;
+}
+
+.shareImg {
+  width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.shareCancelImg {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  cursor: pointer;
+  opacity: 0.7;
+  background-color: white;
+  border-radius: 50%;
+  padding: 4px;
 }
 
 .shareBottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 8px 0;
 }
 
-.shareOptions{
-    display: flex;
-    margin-left: 20px;
+.shareOptions {
+  display: flex;
+  justify-content: start;
 }
 
-.shareOption{
-    display: flex;
-    align-items: center;
-    margin-right: 15px;
-    cursor: pointer;
-}
-
-.shareIcon{
-    font-size: 18px;
-    margin-right: 3px;
-}
-
-.shareOptionText{
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.shareButton{
-    border: none;
-    padding: 12px 24px;
-    border-radius: 25px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    font-weight: 600;
-    margin-right: 20px;
-    cursor: pointer;
-    color: white;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-}
-
-.shareButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-}
-
-.shareButton:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.shareImgContainer{
-  padding: 0 20px 10px 20px;
-  position: relative;
-}
-
-.shareImg{
-  width: 100%;
-  object-fit: cover;
-}
-
-.shareCancelImg{
-  position: absolute;
-  top: 0;
-  right: 20px;
+.shareOption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  opacity: 0.7;
+  padding: 8px;
+  flex: 1;
+  border-radius: 8px;
+  transition: all 0.2s;
+  margin: 0 4px;
+}
+
+.shareOption:hover {
+  background-color: #f0f2f5;
+}
+
+.shareIcon {
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+.shareOptionText {
+  font-size: 15px;
+  font-weight: 600;
+  color: #65676b;
+  white-space: nowrap;
+}
+
+/* On mobile, text might hide or be smaller */
+@media screen and (max-width: 768px) {
+  .shareOptionText {
+    display: none;
+  }
+
+  .shareOption {
+    padding: 10px;
+  }
+}
+
+.shareButton {
+  border: none;
+  padding: 6px 20px;
+  background-color: #1877f2;
+  font-weight: 600;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  margin-left: 10px;
+  display: none;
+  /* Hidden by default to mimic FB's clean composer. Show if needed? User code needs it to submit. */
+}
+
+/* Show share button only if there is a file or text entered? 
+   No, let's keep it visible but maybe distinct from the action row 
+   OR separate the row.
+   FB Layout: 
+   Row 1: Icon + Text
+   ...
+   Row 2: Live | Photo | Feeling
+   
+   If we want the "Share" button to be available, we can put it below or make it small.
+   Actually, the user's code has `form className="shareBottom"`.
+   Let's make the Share button visible but styled nicely, maybe separate from the options row?
+   For now I'll just make it flex with the options.
+*/
+.shareButton {
+  display: block;
+  margin-right: 16px;
+  white-space: nowrap;
+}
+
+/* Tag Suggestions */
+.tagSuggestions {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  padding: 8px;
+}
+
+.tagSuggestionsHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  border-bottom: 1px solid #ced0d4;
+  font-weight: 600;
+  color: #65676b;
+}
+
+.closeTags {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #65676b;
+}
+
+.tagList {
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px;
+}
+
+.tagSuggestion {
+  background: #e4e6eb;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #050505;
+  font-size: 14px;
+}
+
+.tagSuggestion:hover {
+  background-color: #d8dadf;
 }

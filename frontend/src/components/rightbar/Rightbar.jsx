@@ -17,20 +17,17 @@ export default function Rightbar({ user }) {
     currentUser?.followings?.includes(user?._id)
   );
 
-  useEffect(()=>{
-    const checkFollowed=()=>{
+  useEffect(() => {
+    const checkFollowed = () => {
       setFollowed(currentUser?.followings?.includes(user?._id))
     }
     checkFollowed()
-  },[user,currentUser])  
+  }, [user, currentUser])
 
   useEffect(() => {
     const MygetFriends = async () => {
       try {
-        if (!currentUser?._id) {
-          setMyFriends([]);
-          return;
-        }
+        if (!currentUser?._id) return;
         const { data } = await apiClient.get(`/users/friends/${currentUser._id}`);
         setMyFriends(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -39,15 +36,11 @@ export default function Rightbar({ user }) {
     };
     MygetFriends();
   }, [currentUser]);
-  console.log(myFriends)
 
   useEffect(() => {
     const getFriends = async () => {
       try {
-        if (!user?._id) {
-          setFriends([]);
-          return;
-        }
+        if (!user?._id) return;
         const { data } = await apiClient.get("/users/friends/" + user._id);
         setFriends(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -57,8 +50,6 @@ export default function Rightbar({ user }) {
     getFriends();
   }, [user]);
 
-  
-
   const handleClick = async () => {
     try {
       if (followed) {
@@ -66,33 +57,27 @@ export default function Rightbar({ user }) {
           userId: currentUser._id,
         });
         dispatch({ type: "UNFOLLOW", payload: user._id });
-        
       } else {
         await apiClient.put(`/users/${user._id}/follow`, {
           userId: currentUser._id,
         });
         dispatch({ type: "FOLLOW", payload: user._id });
-        setFollowed(!followed)
       }
-      
+      setFollowed(!followed)
     } catch (err) {
+      console.log(err);
     }
   };
 
-  
-
   const [ads, setAds] = useState([]);
-  const [loadingAds, setLoadingAds] = useState(false);
 
   // Fetch ads from database
   useEffect(() => {
     const fetchAds = async () => {
       try {
-        setLoadingAds(true);
         const res = await apiClient.get("/ads");
         setAds(res.data);
       } catch (err) {
-        console.error("Error fetching ads:", err);
         // Fallback to static ads if API fails
         setAds([
           {
@@ -101,7 +86,7 @@ export default function Rightbar({ user }) {
             description: "Get 20% off on all bestsellers!",
             image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
             link: "#",
-            tag: "Books & Literature"
+            tag: "Books"
           },
           {
             _id: 2,
@@ -112,8 +97,6 @@ export default function Rightbar({ user }) {
             tag: "Electronics"
           }
         ]);
-      } finally {
-        setLoadingAds(false);
       }
     };
 
@@ -122,9 +105,7 @@ export default function Rightbar({ user }) {
 
   const handleAdClick = async (ad) => {
     try {
-      // Track click
       await apiClient.put(`/ads/${ad._id}/click`);
-      // Open link
       if (ad.link && ad.link !== "#") {
         window.open(ad.link, '_blank');
       }
@@ -134,40 +115,27 @@ export default function Rightbar({ user }) {
   };
 
   const HomeRightbar = () => {
-
     return (
       <>
         <div className="birthdayContainer">
-          Not all the Ads are Boring
-            
-      
+          <img className="birthdayImg" src="assets/gift.png" alt="" />
+          <span className="birthdayText">
+            <b>Pola Foster</b> and <b>3 other friends</b> have a birthday today.
+          </span>
         </div>
 
         {/* Enhanced Ads Section */}
         <div className="adsSection">
-          <h4 className="rightbarTitle">Sponsored</h4>
-          {loadingAds ? (
-            <div className="adsLoading">Loading ads...</div>
-          ) : ads.length > 0 ? (
-            ads.map((ad) => (
-              <div key={ad._id} className="adCard">
-                <img className="adImage" src={ad.image} alt={ad.title} />
-                <div className="adContent">
-                  <div className="adTag">{ad.tag}</div>
-                  <h5 className="adTitle">{ad.title}</h5>
-                  <p className="adDescription">{ad.description}</p>
-                  <button 
-                    className="adButton" 
-                    onClick={() => handleAdClick(ad)}
-                  >
-                    Learn More
-                  </button>
-                </div>
+          <div className="rightbarTitle">Sponsored</div>
+          {ads.map((ad) => (
+            <div key={ad._id} className="adCard" onClick={() => handleAdClick(ad)}>
+              <img className="adImage" src={ad.image} alt={ad.title} />
+              <div className="adContent">
+                <div className="adTitle">{ad.title}</div>
+                <div className="adDescription">{ad.description}</div>
               </div>
-            ))
-          ) : (
-            <div className="noAds">No ads available</div>
-          )}
+            </div>
+          ))}
         </div>
 
         {/* Trending Topics */}
@@ -175,24 +143,16 @@ export default function Rightbar({ user }) {
           <h4 className="rightbarTitle">Trending Now</h4>
           <div className="trendingTopics">
             <div className="trendingItem">
-              <span className="trendingHash">#</span>
-              <span className="trendingText">BookLovers</span>
+              <span className="trendingText">#BookLovers</span>
               <span className="trendingCount">2.3K posts</span>
             </div>
             <div className="trendingItem">
-              <span className="trendingHash">#</span>
-              <span className="trendingText">TechDeals</span>
+              <span className="trendingText">#TechDeals</span>
               <span className="trendingCount">1.8K posts</span>
             </div>
             <div className="trendingItem">
-              <span className="trendingHash">#</span>
-              <span className="trendingText">FashionTips</span>
+              <span className="trendingText">#FashionTips</span>
               <span className="trendingCount">3.1K posts</span>
-            </div>
-            <div className="trendingItem">
-              <span className="trendingHash">#</span>
-              <span className="trendingText">FitnessGoals</span>
-              <span className="trendingCount">4.2K posts</span>
             </div>
           </div>
         </div>
@@ -231,23 +191,24 @@ export default function Rightbar({ user }) {
             <span className="rightbarInfoValue">
               {user.relationship === 1
                 ? "Single"
-                : user.relationship === 1
-                ? "Married"
-                : "-"}
+                : user.relationship === 2
+                  ? "Married"
+                  : "-"}
             </span>
           </div>
         </div>
         <h4 className="rightbarTitle">User friends</h4>
         <div className="rightbarFollowings">
           {friends.map((friend) => (
-            <Link 
+            <Link
               to={"/profile/" + friend.username}
-              style={{ textDecoration: "none" ,color:"black",textDecorationColor:"black"}}
+              style={{ textDecoration: "none" }}
+              key={friend._id}
             >
-              <div className="rightbarFollowing" key={friend._id}>
+              <div className="rightbarFollowing">
                 <img
                   src={getProfileImageUrl(friend.profilePicture)}
-                  alt={friend.username || "Friend"}
+                  alt={friend.username}
                   className="rightbarFollowingImg"
                 />
                 <span className="rightbarFollowingName">{friend.username}</span>
@@ -266,3 +227,4 @@ export default function Rightbar({ user }) {
     </div>
   );
 }
+

@@ -1,6 +1,28 @@
-html, body, #root {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #1877f2;
+  --primary-hover: #166fe5;
+  --bg-color: #f0f2f5;
+  --text-main: #050505;
+  --text-secondary: #65676b;
+  --card-bg: #ffffff;
+  --border-color: #dddfe2;
+  --input-bg: #f5f6f7;
+  --success: #42b72a;
+  --success-hover: #36a420;
+}
+
+html,
+body,
+#root {
   height: 100%;
   width: 100%;
+  font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
 }
 
 /* Make layout resilient to browser zoom by avoiding fixed viewport traps */
@@ -18,5 +40,3 @@ body {
 .homeContainer {
   min-height: calc(100vh - 50px);
 }
-
-

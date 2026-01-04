@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
       imageCount: req.body.productImages?.length || 0,
       images: req.body.productImages
     });
-    
+
     const newProduct = new Product({
       userId: req.body.userId,
       productName: req.body.productName,
@@ -38,13 +38,13 @@ router.post("/", async (req, res) => {
     });
 
     const savedProduct = await newProduct.save();
-    
+
     console.log("Product created successfully:", {
       productId: savedProduct._id,
       imageCount: savedProduct.productImages?.length || 0,
       images: savedProduct.productImages
     });
-    
+
     res.status(200).json(savedProduct);
   } catch (err) {
     console.error("Error creating product:", err);
@@ -55,37 +55,37 @@ router.post("/", async (req, res) => {
 // Get all products with activity-based sorting
 router.get("/", async (req, res) => {
   try {
-    const { sortBy = "relevance", limit, page = 1 } = req.query;
+    const { sortBy = "relevance", limit, page = 1, preferredCategories } = req.query;
     const pageSize = limit ? parseInt(limit) : undefined;
     const skip = pageSize ? (parseInt(page) - 1) * pageSize : 0;
-    
+
     let query = Product.find({ status: "Active" })
       .populate("userId", "username profilePicture");
-    
+
     if (sortBy === "relevance") {
       // Get products first
       const products = await query.lean();
-      
+
       if (products.length === 0) {
         return res.status(200).json([]);
       }
-      
+
       // Get activity counts for all products
       const productIds = products.map(p => p._id);
       const activityData = await ProductActivity.getBulkActivityCounts(productIds);
-      
+
       // Calculate relevance scores and add to products
       const productsWithScores = products.map(product => {
         const activities = activityData[product._id.toString()] || { view: 0, click: 0, offer: 0 };
         const relevanceScore = ProductActivity.calculateRelevanceScore(activities);
-        
+
         return {
           ...product,
           activityCounts: activities,
           relevanceScore: relevanceScore
         };
       });
-      
+
       // Sort by relevance score (highest first), then by creation date
       productsWithScores.sort((a, b) => {
         if (a.relevanceScore === b.relevanceScore) {
@@ -93,12 +93,45 @@ router.get("/", async (req, res) => {
         }
         return b.relevanceScore - a.relevanceScore;
       });
-      
+
       // Apply pagination if specified
-      const paginatedProducts = pageSize ? 
-        productsWithScores.slice(skip, skip + pageSize) : 
+      const paginatedProducts = pageSize ?
+        productsWithScores.slice(skip, skip + pageSize) :
         productsWithScores;
-      
+
+      res.status(200).json(paginatedProducts);
+    } else if (sortBy === "most-viewed") {
+      // Sort by view count
+      const products = await query.lean();
+
+      if (products.length === 0) {
+        return res.status(200).json([]);
+      }
+
+      const productIds = products.map(p => p._id);
+      const activityData = await ProductActivity.getBulkActivityCounts(productIds);
+
+      const productsWithViews = products.map(product => {
+        const activities = activityData[product._id.toString()] || { view: 0, click: 0, offer: 0 };
+        return {
+          ...product,
+          activityCounts: activities,
+          viewCount: activities.view
+        };
+      });
+
+      // Sort by view count (highest first), then by creation date
+      productsWithViews.sort((a, b) => {
+        if (a.viewCount === b.viewCount) {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        }
+        return b.viewCount - a.viewCount;
+      });
+
+      const paginatedProducts = pageSize ?
+        productsWithViews.slice(skip, skip + pageSize) :
+        productsWithViews;
+
       res.status(200).json(paginatedProducts);
     } else {
       // Standard sorting options
@@ -122,11 +155,11 @@ router.get("/", async (req, res) => {
         default:
           sortOption = { createdAt: -1 };
       }
-      
+
       if (pageSize) {
         query = query.skip(skip).limit(pageSize);
       }
-      
+
       const products = await query.sort(sortOption);
       res.status(200).json(products);
     }
@@ -142,51 +175,82 @@ router.get("/category/:category", async (req, res) => {
     const { sortBy = "relevance", limit, page = 1 } = req.query;
     const pageSize = limit ? parseInt(limit) : undefined;
     const skip = pageSize ? (parseInt(page) - 1) * pageSize : 0;
-    
-    let query = Product.find({ 
+
+    let query = Product.find({
       productCategory: req.params.category,
-      status: "Active" 
+      status: "Active"
     }).populate("userId", "username profilePicture");
-    
+
     if (sortBy === "relevance") {
       const products = await query.lean();
-      
+
       if (products.length === 0) {
         return res.status(200).json([]);
       }
-      
+
       const productIds = products.map(p => p._id);
       const activityData = await ProductActivity.getBulkActivityCounts(productIds);
-      
+
       const productsWithScores = products.map(product => {
         const activities = activityData[product._id.toString()] || { view: 0, click: 0, offer: 0 };
         const relevanceScore = ProductActivity.calculateRelevanceScore(activities);
-        
+
         return {
           ...product,
           activityCounts: activities,
           relevanceScore: relevanceScore
         };
       });
-      
+
       productsWithScores.sort((a, b) => {
         if (a.relevanceScore === b.relevanceScore) {
           return new Date(b.createdAt) - new Date(a.createdAt);
         }
         return b.relevanceScore - a.relevanceScore;
       });
-      
-      const paginatedProducts = pageSize ? 
-        productsWithScores.slice(skip, skip + pageSize) : 
+
+      const paginatedProducts = pageSize ?
+        productsWithScores.slice(skip, skip + pageSize) :
         productsWithScores;
-      
+
+      res.status(200).json(paginatedProducts);
+    } else if (sortBy === "most-viewed") {
+      const products = await query.lean();
+
+      if (products.length === 0) {
+        return res.status(200).json([]);
+      }
+
+      const productIds = products.map(p => p._id);
+      const activityData = await ProductActivity.getBulkActivityCounts(productIds);
+
+      const productsWithViews = products.map(product => {
+        const activities = activityData[product._id.toString()] || { view: 0, click: 0, offer: 0 };
+        return {
+          ...product,
+          activityCounts: activities,
+          viewCount: activities.view
+        };
+      });
+
+      productsWithViews.sort((a, b) => {
+        if (a.viewCount === b.viewCount) {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        }
+        return b.viewCount - a.viewCount;
+      });
+
+      const paginatedProducts = pageSize ?
+        productsWithViews.slice(skip, skip + pageSize) :
+        productsWithViews;
+
       res.status(200).json(paginatedProducts);
     } else {
       let sortOption = { createdAt: -1 };
       if (pageSize) {
         query = query.skip(skip).limit(pageSize);
       }
-      
+
       const products = await query.sort(sortOption);
       res.status(200).json(products);
     }
@@ -202,51 +266,82 @@ router.get("/type/:type", async (req, res) => {
     const { sortBy = "relevance", limit, page = 1 } = req.query;
     const pageSize = limit ? parseInt(limit) : undefined;
     const skip = pageSize ? (parseInt(page) - 1) * pageSize : 0;
-    
-    let query = Product.find({ 
+
+    let query = Product.find({
       productFor: req.params.type,
-      status: "Active" 
+      status: "Active"
     }).populate("userId", "username profilePicture");
-    
+
     if (sortBy === "relevance") {
       const products = await query.lean();
-      
+
       if (products.length === 0) {
         return res.status(200).json([]);
       }
-      
+
       const productIds = products.map(p => p._id);
       const activityData = await ProductActivity.getBulkActivityCounts(productIds);
-      
+
       const productsWithScores = products.map(product => {
         const activities = activityData[product._id.toString()] || { view: 0, click: 0, offer: 0 };
         const relevanceScore = ProductActivity.calculateRelevanceScore(activities);
-        
+
         return {
           ...product,
           activityCounts: activities,
           relevanceScore: relevanceScore
         };
       });
-      
+
       productsWithScores.sort((a, b) => {
         if (a.relevanceScore === b.relevanceScore) {
           return new Date(b.createdAt) - new Date(a.createdAt);
         }
         return b.relevanceScore - a.relevanceScore;
       });
-      
-      const paginatedProducts = pageSize ? 
-        productsWithScores.slice(skip, skip + pageSize) : 
+
+      const paginatedProducts = pageSize ?
+        productsWithScores.slice(skip, skip + pageSize) :
         productsWithScores;
-      
+
+      res.status(200).json(paginatedProducts);
+    } else if (sortBy === "most-viewed") {
+      const products = await query.lean();
+
+      if (products.length === 0) {
+        return res.status(200).json([]);
+      }
+
+      const productIds = products.map(p => p._id);
+      const activityData = await ProductActivity.getBulkActivityCounts(productIds);
+
+      const productsWithViews = products.map(product => {
+        const activities = activityData[product._id.toString()] || { view: 0, click: 0, offer: 0 };
+        return {
+          ...product,
+          activityCounts: activities,
+          viewCount: activities.view
+        };
+      });
+
+      productsWithViews.sort((a, b) => {
+        if (a.viewCount === b.viewCount) {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        }
+        return b.viewCount - a.viewCount;
+      });
+
+      const paginatedProducts = pageSize ?
+        productsWithViews.slice(skip, skip + pageSize) :
+        productsWithViews;
+
       res.status(200).json(paginatedProducts);
     } else {
       let sortOption = { createdAt: -1 };
       if (pageSize) {
         query = query.skip(skip).limit(pageSize);
       }
-      
+
       const products = await query.sort(sortOption);
       res.status(200).json(products);
     }
@@ -260,25 +355,25 @@ router.get("/type/:type", async (req, res) => {
 router.get("/recommendations", async (req, res) => {
   try {
     const { limit = 10, userId } = req.query;
-    
+
     // Get all active products
     const products = await Product.find({ status: "Active" })
       .populate("userId", "username profilePicture")
       .lean();
-    
+
     if (products.length === 0) {
       return res.status(200).json([]);
     }
-    
+
     // Get activity data for all products
     const productIds = products.map(p => p._id);
     const activityData = await ProductActivity.getBulkActivityCounts(productIds);
-    
+
     // Calculate scores and sort by relevance
     const productsWithScores = products.map(product => {
       const activities = activityData[product._id.toString()] || { view: 0, click: 0, offer: 0 };
       const relevanceScore = ProductActivity.calculateRelevanceScore(activities);
-      
+
       return {
         ...product,
         activityCounts: activities,
@@ -291,10 +386,10 @@ router.get("/recommendations", async (req, res) => {
       }
       return b.relevanceScore - a.relevanceScore;
     });
-    
+
     // Apply limit
     const recommendations = productsWithScores.slice(0, parseInt(limit));
-    
+
     res.status(200).json(recommendations);
   } catch (err) {
     console.error("Error getting recommendations:", err);
@@ -309,12 +404,12 @@ router.get("/:id", async (req, res) => {
       .populate("userId", "username profilePicture")
       .populate("offers.userId", "username profilePicture")
       .populate("claims.userId", "username profilePicture");
-    
+
     // Log product images for debugging
     if (product && product.productImages) {
       console.log(`Product ${req.params.id} images:`, product.productImages);
     }
-    
+
     res.status(200).json(product);
   } catch (err) {
     console.error("Error fetching product:", err);
@@ -363,7 +458,7 @@ router.post("/:id/offer", async (req, res) => {
       claimTill: req.body.claimTill,
       message: req.body.message,
     };
-    
+
     await product.updateOne({
       $push: { offers: offer }
     });
@@ -382,7 +477,7 @@ router.post("/:id/claim", async (req, res) => {
       claimTill: req.body.claimTill,
       message: req.body.message,
     };
-    
+
     await product.updateOne({
       $push: { claims: claim }
     });
@@ -398,12 +493,12 @@ router.put("/:id/offer/:offerId", async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product.userId.toString() === req.body.userId) {
       await Product.updateOne(
-        { 
+        {
           _id: req.params.id,
-          "offers._id": req.params.offerId 
+          "offers._id": req.params.offerId
         },
-        { 
-          $set: { "offers.$.status": req.body.status } 
+        {
+          $set: { "offers.$.status": req.body.status }
         }
       );
       res.status(200).json("Offer status updated");
@@ -421,12 +516,12 @@ router.put("/:id/claim/:claimId", async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product.userId.toString() === req.body.userId) {
       await Product.updateOne(
-        { 
+        {
           _id: req.params.id,
-          "claims._id": req.params.claimId 
+          "claims._id": req.params.claimId
         },
-        { 
-          $set: { "claims.$.status": req.body.status } 
+        {
+          $set: { "claims.$.status": req.body.status }
         }
       );
       res.status(200).json("Claim status updated");
@@ -516,21 +611,21 @@ router.put("/:id/status", async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product.userId.toString() === req.body.userId) {
       const updateData = { status: req.body.status };
-      
+
       // If marking as sold or booked, set current buyer and transaction details
       if (req.body.status === "Sold" || req.body.status === "Booked") {
         updateData.currentBuyer = req.body.buyerId;
         updateData.transactionStatus = "Confirmed";
         updateData.transactionDate = new Date();
       }
-      
+
       // If marking as active again, clear buyer and transaction details
       if (req.body.status === "Active") {
         updateData.currentBuyer = null;
         updateData.transactionStatus = "None";
         updateData.transactionDate = null;
       }
-      
+
       await product.updateOne({ $set: updateData });
       res.status(200).json("Product status updated successfully");
     } else {
@@ -552,19 +647,19 @@ router.put("/:id/accept-offer/:offerId", async (req, res) => {
 
       // Update the offer status
       await Product.updateOne(
-        { 
+        {
           _id: req.params.id,
-          "offers._id": req.params.offerId 
+          "offers._id": req.params.offerId
         },
-        { 
-          $set: { 
+        {
+          $set: {
             "offers.$.status": "Accepted",
             "offers.$.responseMessage": req.body.responseMessage || "Offer accepted",
             "offers.$.respondedAt": new Date()
-          } 
+          }
         }
       );
-      
+
       // Update product status and set current buyer
       await Product.updateOne(
         { _id: req.params.id },
@@ -624,19 +719,19 @@ router.put("/:id/accept-claim/:claimId", async (req, res) => {
     if (product.userId.toString() === req.body.userId) {
       // Update the claim status
       await Product.updateOne(
-        { 
+        {
           _id: req.params.id,
-          "claims._id": req.params.claimId 
+          "claims._id": req.params.claimId
         },
-        { 
-          $set: { 
+        {
+          $set: {
             "claims.$.status": "Accepted",
             "claims.$.responseMessage": req.body.responseMessage || "Claim accepted",
             "claims.$.respondedAt": new Date()
-          } 
+          }
         }
       );
-      
+
       // Update product status and set current buyer
       await Product.updateOne(
         { _id: req.params.id },
@@ -649,7 +744,7 @@ router.put("/:id/accept-claim/:claimId", async (req, res) => {
           }
         }
       );
-      
+
       res.status(200).json("Claim accepted and product status updated");
     } else {
       return res.status(403).json("You can only accept claims on your own products");
@@ -694,21 +789,21 @@ router.get("/transactions/:userId", async (req, res) => {
       .populate("currentBuyer", "username profilePicture")
       .populate("offers.userId", "username profilePicture")
       .populate("claims.userId", "username profilePicture");
-    
+
     // Get products where user has made offers
     const userOffers = await Product.find({
       "offers.userId": req.params.userId
     })
       .populate("userId", "username profilePicture")
       .populate("offers.userId", "username profilePicture");
-    
+
     // Get products where user has made claims
     const userClaims = await Product.find({
       "claims.userId": req.params.userId
     })
       .populate("userId", "username profilePicture")
       .populate("claims.userId", "username profilePicture");
-    
+
     res.status(200).json({
       userProducts,
       userOffers,

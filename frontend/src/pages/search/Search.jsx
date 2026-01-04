@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useHistory, Link } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import apiClient from "../../utils/apiClient";
-import { Person, Description, Store } from "@material-ui/icons";
+import { Person, ArrowForward } from "@material-ui/icons";
 import Layout from "../../components/layout/Layout";
+import { getProfileImageUrl, getImageUrl } from "../../utils/imageUtils";
 import "./search.css";
 
 export default function Search() {
@@ -12,7 +13,6 @@ export default function Search() {
   const location = useLocation();
   const history = useHistory();
   const query = new URLSearchParams(location.search).get("q");
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER || "http://localhost:8800/images/";
 
   useEffect(() => {
     if (query && query.trim()) {
@@ -31,11 +31,11 @@ export default function Search() {
     try {
       setLoading(true);
       let endpoint = `/search?q=${encodeURIComponent(query.trim())}`;
-      
+
       if (activeTab !== "all") {
         endpoint += `&type=${activeTab}`;
       }
-      
+
       const res = await apiClient.get(endpoint);
       setSearchResults(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
@@ -44,6 +44,10 @@ export default function Search() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCardClick = (path) => {
+    history.push(path);
   };
 
   const renderSearchResults = () => {
@@ -59,7 +63,9 @@ export default function Search() {
     if (!query || !query.trim()) {
       return (
         <div className="noSearchQuery">
-          <p>Enter a search query to find users, posts, and products</p>
+          <div className="emptyStateIcon">items</div>
+          <h3>Start your search</h3>
+          <p>Find friends, posts, or products in the marketplace</p>
         </div>
       );
     }
@@ -69,8 +75,8 @@ export default function Search() {
         <div className="noResults">
           <div className="noResultsIcon">🔍</div>
           <h3>No results found</h3>
-          <p>No results found for "{query}"</p>
-          <p className="noResultsHint">Try different keywords or check your spelling</p>
+          <p>We couldn't find anything for "{query}"</p>
+          <p className="noResultsHint">Try searching for people, keywords, or item names</p>
         </div>
       );
     }
@@ -81,264 +87,113 @@ export default function Search() {
 
     return (
       <div className="searchResultsContainer">
-        {activeTab === "all" && (
-          <>
-            {users.length > 0 && (
-              <div className="resultsSection">
-                <h2 className="sectionTitle">Users ({users.length})</h2>
-                <div className="resultsGrid">
-                  {users.map((user) => (
-                    <Link
-                      key={user._id}
-                      to={`/profile/${user.username}`}
-                      className="searchResultCard userCard"
-                    >
-                      <div className="cardImage">
-                        {user.profilePicture ? (
-                          <img
-                            src={user.profilePicture.startsWith("http") ? user.profilePicture : PF + user.profilePicture}
-                            alt={user.username}
-                            onError={(e) => {
-                              e.target.src = PF + "person/noAvatar.png";
-                            }}
-                          />
-                        ) : (
-                          <Person className="cardIcon" />
-                        )}
-                      </div>
-                      <div className="cardContent">
-                        <h3>{user.fullName || user.username}</h3>
-                        <p className="cardSubtitle">@{user.username}</p>
-                        {user.bio && <p className="cardDescription">{user.bio}</p>}
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {posts.length > 0 && (
-              <div className="resultsSection">
-                <h2 className="sectionTitle">Posts ({posts.length})</h2>
-                <div className="resultsGrid">
-                  {posts.map((post) => (
-                    <Link
-                      key={post._id}
-                      to={`/`}
-                      className="searchResultCard postCard"
-                    >
-                      {post.img && (
-                        <div className="cardImage">
-                          <img
-                            src={post.img.startsWith("http") ? post.img : PF + post.img}
-                            alt="Post"
-                            onError={(e) => {
-                              e.target.style.display = "none";
-                            }}
-                          />
-                        </div>
-                      )}
-                      <div className="cardContent">
-                        {post.desc ? (
-                          <p className="cardDescription">{post.desc}</p>
-                        ) : (
-                          <p className="cardDescription">Post</p>
-                        )}
-                        <div className="cardMeta">
-                          <span>
-                            By {post.userId?.fullName || post.userId?.username || "Unknown"}
-                          </span>
-                          {post.tags && post.tags.length > 0 && (
-                            <div className="cardTags">
-                              {post.tags.slice(0, 3).map((tag, i) => (
-                                <span key={i} className="tag">#{tag}</span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {products.length > 0 && (
-              <div className="resultsSection">
-                <h2 className="sectionTitle">Products ({products.length})</h2>
-                <div className="resultsGrid">
-                  {products.map((product) => (
-                    <Link
-                      key={product._id}
-                      to={`/marketplace/product/${product._id}`}
-                      className="searchResultCard productCard"
-                    >
-                      {product.productImages && product.productImages[0] && (
-                        <div className="cardImage">
-                          <img
-                            src={product.productImages[0].startsWith("http") ? product.productImages[0] : PF + product.productImages[0]}
-                            alt={product.productName}
-                            onError={(e) => {
-                              e.target.style.display = "none";
-                            }}
-                          />
-                        </div>
-                      )}
-                      <div className="cardContent">
-                        <h3>{product.productName}</h3>
-                        {product.productDescription && (
-                          <p className="cardDescription">{product.productDescription}</p>
-                        )}
-                        <div className="cardMeta">
-                          <span>
-                            By {product.userId?.fullName || product.userId?.username || "Unknown"}
-                          </span>
-                          {product.productPrice && (
-                            <span className="cardPrice">NRs. {product.productPrice}</span>
-                          )}
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </>
-        )}
-
-        {activeTab === "users" && users.length > 0 && (
-          <div className="resultsSection">
-            <div className="resultsGrid">
+        {(activeTab === "all" || activeTab === "users") && users.length > 0 && (
+          <div className="resultsSection fade-in">
+            <h2 className="sectionTitle">
+              People <span className="count-badge">{users.length}</span>
+            </h2>
+            <div className="resultsGrid usersGrid">
               {users.map((user) => (
-                <Link
+                <div
                   key={user._id}
-                  to={`/profile/${user.username}`}
                   className="searchResultCard userCard"
+                  onClick={() => handleCardClick(`/profile/${user.username}`)}
                 >
                   <div className="cardImage">
-                    {user.profilePicture ? (
-                      <img
-                        src={user.profilePicture.startsWith("http") ? user.profilePicture : PF + user.profilePicture}
-                        alt={user.username}
-                        onError={(e) => {
-                          e.target.src = PF + "person/noAvatar.png";
-                        }}
-                      />
-                    ) : (
-                      <Person className="cardIcon" />
-                    )}
+                    <img
+                      src={getProfileImageUrl(user.profilePicture)}
+                      alt={user.username}
+                      onError={(e) => { e.target.src = getProfileImageUrl(null); }}
+                    />
                   </div>
                   <div className="cardContent">
                     <h3>{user.fullName || user.username}</h3>
                     <p className="cardSubtitle">@{user.username}</p>
                     {user.bio && <p className="cardDescription">{user.bio}</p>}
                   </div>
-                </Link>
+                  <button className="viewBtn">View</button>
+                </div>
               ))}
             </div>
           </div>
         )}
 
-        {activeTab === "posts" && posts.length > 0 && (
-          <div className="resultsSection">
-            <div className="resultsGrid">
-              {posts.map((post) => (
-                <Link
-                  key={post._id}
-                  to={`/`}
-                  className="searchResultCard postCard"
-                >
-                  {post.img && (
-                    <div className="cardImage">
-                      <img
-                        src={post.img.startsWith("http") ? post.img : PF + post.img}
-                        alt="Post"
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
-                      />
-                    </div>
-                  )}
-                  <div className="cardContent">
-                    {post.desc ? (
-                      <p className="cardDescription">{post.desc}</p>
-                    ) : (
-                      <p className="cardDescription">Post</p>
-                    )}
-                    <div className="cardMeta">
-                      <span>
-                        By {post.userId?.fullName || post.userId?.username || "Unknown"}
-                      </span>
-                      {post.tags && post.tags.length > 0 && (
-                        <div className="cardTags">
-                          {post.tags.slice(0, 3).map((tag, i) => (
-                            <span key={i} className="tag">#{tag}</span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {activeTab === "products" && products.length > 0 && (
-          <div className="resultsSection">
-            <div className="resultsGrid">
+        {(activeTab === "all" || activeTab === "products") && products.length > 0 && (
+          <div className="resultsSection fade-in">
+            <h2 className="sectionTitle">
+              Marketplace <span className="count-badge">{products.length}</span>
+            </h2>
+            <div className="resultsGrid productsGrid">
               {products.map((product) => (
-                <Link
+                <div
                   key={product._id}
-                  to={`/marketplace/product/${product._id}`}
                   className="searchResultCard productCard"
+                  onClick={() => handleCardClick(`/marketplace/product/${product._id}`)}
                 >
-                  {product.productImages && product.productImages[0] && (
-                    <div className="cardImage">
-                      <img
-                        src={product.productImages[0].startsWith("http") ? product.productImages[0] : PF + product.productImages[0]}
-                        alt={product.productName}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
-                      />
-                    </div>
-                  )}
+                  <div className="cardImage">
+                    <img
+                      src={product.productImages && product.productImages[0] ? getImageUrl(product.productImages[0]) : getImageUrl(null)}
+                      alt={product.productName}
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                    <div className="priceTag">NRs. {product.productPrice}</div>
+                  </div>
                   <div className="cardContent">
                     <h3>{product.productName}</h3>
-                    {product.productDescription && (
-                      <p className="cardDescription">{product.productDescription}</p>
-                    )}
-                    <div className="cardMeta">
-                      <span>
-                        By {product.userId?.fullName || product.userId?.username || "Unknown"}
-                      </span>
-                      {product.productPrice && (
-                        <span className="cardPrice">NRs. {product.productPrice}</span>
-                      )}
+                    <div className="mini-meta">
+                      <span className="location-icon">📍</span>
+                      {product.location || "Kathmandu"}
                     </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
         )}
 
-        {activeTab === "users" && users.length === 0 && !loading && (
-          <div className="noResults">
-            <p>No users found for "{query}"</p>
-          </div>
-        )}
+        {(activeTab === "all" || activeTab === "posts") && posts.length > 0 && (
+          <div className="resultsSection fade-in">
+            <h2 className="sectionTitle">
+              Posts <span className="count-badge">{posts.length}</span>
+            </h2>
+            <div className="resultsGrid postsGrid">
+              {posts.map((post) => (
+                <div
+                  key={post._id}
+                  className="searchResultCard postCard"
+                  onClick={() => handleCardClick(`/`)}
+                >
+                  {/* Note: Linking to feed for now as single post view might not exist or be different */}
+                  <div className="postHeader">
+                    <img
+                      src={getProfileImageUrl(post.userId?.profilePicture)}
+                      alt=""
+                      className="postAvatar"
+                    />
+                    <div className="postMetaInfo">
+                      <span className="postAuthor">{post.userId?.fullName || post.userId?.username}</span>
+                      <span className="postDate">Recent</span>
+                    </div>
+                  </div>
 
-        {activeTab === "posts" && posts.length === 0 && !loading && (
-          <div className="noResults">
-            <p>No posts found for "{query}"</p>
-          </div>
-        )}
+                  {post.desc && <p className="postText">{post.desc}</p>}
 
-        {activeTab === "products" && products.length === 0 && !loading && (
-          <div className="noResults">
-            <p>No products found for "{query}"</p>
+                  {post.img && (
+                    <div className="postImageContainer">
+                      <img
+                        src={getImageUrl(post.img)}
+                        alt="Post"
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                    </div>
+                  )}
+
+                  <div className="postFooter">
+                    <span className="readMore">View full post <ArrowForward style={{ fontSize: 14 }} /></span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -350,7 +205,7 @@ export default function Search() {
       <div className="searchPage">
         <div className="searchHeader">
           <h1>Search Results</h1>
-          {query && <p className="searchQuery">Showing results for: "{query}"</p>}
+          {query && <p className="searchQuery">Found results for &quot;{query}&quot;</p>}
         </div>
 
         <div className="searchTabs">
@@ -364,7 +219,7 @@ export default function Search() {
             className={`tab ${activeTab === "users" ? "active" : ""}`}
             onClick={() => setActiveTab("users")}
           >
-            Users
+            People
           </button>
           <button
             className={`tab ${activeTab === "posts" ? "active" : ""}`}
@@ -376,7 +231,7 @@ export default function Search() {
             className={`tab ${activeTab === "products" ? "active" : ""}`}
             onClick={() => setActiveTab("products")}
           >
-            Products
+            Marketplace
           </button>
         </div>
 

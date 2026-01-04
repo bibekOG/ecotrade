@@ -4,13 +4,13 @@ import { Send, Close, Message } from "@material-ui/icons";
 import { getImageUrl } from "../../utils/imageUtils";
 import "./productMessageBox.css";
 
-export default function ProductMessageBox({ 
-  product, 
+export default function ProductMessageBox({
+  product,
   otherUser,
-  currentUser, 
-  isOpen, 
-  onClose, 
-  onMessageSent 
+  currentUser,
+  isOpen,
+  onClose,
+  onMessageSent
 }) {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -23,7 +23,7 @@ export default function ProductMessageBox({
     exchangeProduct: "",
     message: "",
   });
-  
+
   const messagesEndRef = useRef(null);
   const messageBoxRef = useRef(null);
 
@@ -117,14 +117,14 @@ export default function ProductMessageBox({
       }
 
       // Get product owner ID (handle both populated and non-populated cases)
-      const productOwnerId = productWithOwner.userId?._id?.toString() || 
-                             productWithOwner.userId?.toString() || 
-                             productWithOwner.userId;
-      
+      const productOwnerId = productWithOwner.userId?._id?.toString() ||
+        productWithOwner.userId?.toString() ||
+        productWithOwner.userId;
+
       // Normalize IDs for comparison
       const currentUserId = currentUser._id?.toString() || currentUser._id;
       const otherUserId = otherUser._id?.toString() || otherUser._id;
-      
+
       // Verify that either sender or receiver is the product owner
       const isCurrentUserOwner = productOwnerId && productOwnerId === currentUserId;
       const isOtherUserOwner = productOwnerId && productOwnerId === otherUserId;
@@ -160,7 +160,7 @@ export default function ProductMessageBox({
         setMessages(prev => [...prev, res.data]);
         setNewMessage("");
         setImageFile(null);
-        
+
         if (onMessageSent) {
           onMessageSent(res.data);
         }
@@ -175,7 +175,7 @@ export default function ProductMessageBox({
         data: err.response?.data,
         message: err.message
       });
-      
+
       // Show more specific error message
       if (err.response?.status === 403) {
         alert("You can only message about products you own or are interested in.");
@@ -193,10 +193,10 @@ export default function ProductMessageBox({
 
   const sendOffer = async (e) => {
     e.preventDefault();
-    
+
     try {
       setSending(true);
-      
+
       // Track offer activity
       try {
         await apiClient.post("/productActivities/track", {
@@ -214,7 +214,7 @@ export default function ProductMessageBox({
       } catch (activityError) {
         console.error("Error tracking offer activity:", activityError);
       }
-      
+
       const messageData = {
         productId: product._id,
         senderId: currentUser._id,
@@ -226,7 +226,7 @@ export default function ProductMessageBox({
       };
 
       const res = await apiClient.post("/productMessages", messageData);
-      
+
       setMessages(prev => [...prev, res.data]);
       setShowOfferForm(false);
       setOfferData({
@@ -234,7 +234,7 @@ export default function ProductMessageBox({
         exchangeProduct: "",
         message: "",
       });
-      
+
       if (onMessageSent) {
         onMessageSent(res.data);
       }
@@ -250,7 +250,7 @@ export default function ProductMessageBox({
     const date = new Date(timestamp);
     const now = new Date();
     const diffInHours = (now - date) / (1000 * 60 * 60);
-    
+
     if (diffInHours < 24) {
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } else {
@@ -288,8 +288,8 @@ export default function ProductMessageBox({
         ) : (
           <div className="messagesList">
             {messages.map((message) => (
-              <div 
-                key={message._id} 
+              <div
+                key={message._id}
                 className={`message ${isOwnMessage(message) ? 'own' : 'other'}`}
               >
                 <div className="messageContent">
@@ -307,12 +307,12 @@ export default function ProductMessageBox({
                     // Get the full image URL for message attachments
                     const getMessageImageUrl = () => {
                       if (!message.imageUrl) return null;
-                      
+
                       // If it's already a full URL, return as is
                       if (message.imageUrl.startsWith('http://') || message.imageUrl.startsWith('https://')) {
                         return message.imageUrl;
                       }
-                      
+
                       // If it starts with /images/, construct full URL
                       if (message.imageUrl.startsWith('/images/')) {
                         let baseUrl = process.env.REACT_APP_PUBLIC_FOLDER || "http://localhost:8800/images/";
@@ -320,30 +320,30 @@ export default function ProductMessageBox({
                         baseUrl = baseUrl.replace(/\/$/, '');
                         return `${baseUrl}${message.imageUrl}`;
                       }
-                      
+
                       // Otherwise use the imageUtils helper
                       return getImageUrl(message.imageUrl);
                     };
-                    
+
                     const imageUrl = getMessageImageUrl();
                     const isImageMessage = imageUrl || message.messageType === 'image';
-                    
+
                     // Filter out placeholder text like "attachment" or "Cattachment"
-                    const displayText = message.message && 
-                      !message.message.toLowerCase().includes('cattachment') && 
+                    const displayText = message.message &&
+                      !message.message.toLowerCase().includes('cattachment') &&
                       !message.message.toLowerCase().includes('attachment') &&
                       message.message.trim() !== 'Cattachment' &&
                       message.message.trim() !== 'attachment'
-                      ? message.message 
+                      ? message.message
                       : null;
-                    
+
                     return (
                       <>
                         {isImageMessage && imageUrl && (
                           <a href={imageUrl} target="_blank" rel="noreferrer" className="messageImageLink">
-                            <img 
-                              src={imageUrl} 
-                              alt="Message attachment" 
+                            <img
+                              src={imageUrl}
+                              alt="Message attachment"
                               className="messageImage"
                               onError={(e) => {
                                 console.error('Failed to load image:', imageUrl);
@@ -359,10 +359,14 @@ export default function ProductMessageBox({
                   <span className="messageTime">{formatTime(message.createdAt)}</span>
                 </div>
                 {!isOwnMessage(message) && (
-                  <img 
-                    src={message.senderId.profilePicture || "/assets/person/noAvatar.png"} 
-                    alt="" 
+                  <img
+                    src={message.senderId.profilePicture ? (message.senderId.profilePicture.startsWith("http") ? message.senderId.profilePicture : process.env.REACT_APP_PUBLIC_FOLDER + message.senderId.profilePicture) : "/assets/person/noAvatar.png"}
+                    alt=""
                     className="messageAvatar"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/assets/person/noAvatar.png";
+                    }}
                   />
                 )}
               </div>
@@ -374,7 +378,7 @@ export default function ProductMessageBox({
 
       <div className="messageBoxActions">
         {product.productFor !== "Giveaway" && (
-          <button 
+          <button
             className="offerButton"
             onClick={() => {
               // Track click activity for showing offer form
@@ -408,7 +412,7 @@ export default function ProductMessageBox({
                 type="number"
                 placeholder="Your Offer Amount"
                 value={offerData.offerAmount}
-                onChange={(e) => setOfferData({...offerData, offerAmount: e.target.value})}
+                onChange={(e) => setOfferData({ ...offerData, offerAmount: e.target.value })}
                 required
                 className="offerInput"
               />
@@ -418,7 +422,7 @@ export default function ProductMessageBox({
                 type="text"
                 placeholder="Your Exchange Product"
                 value={offerData.exchangeProduct}
-                onChange={(e) => setOfferData({...offerData, exchangeProduct: e.target.value})}
+                onChange={(e) => setOfferData({ ...offerData, exchangeProduct: e.target.value })}
                 required
                 className="offerInput"
               />
@@ -426,15 +430,15 @@ export default function ProductMessageBox({
             <textarea
               placeholder="Message (optional)"
               value={offerData.message}
-              onChange={(e) => setOfferData({...offerData, message: e.target.value})}
+              onChange={(e) => setOfferData({ ...offerData, message: e.target.value })}
               className="offerTextarea"
             />
             <div className="offerFormActions">
               <button type="submit" disabled={sending} className="sendOfferBtn">
                 {sending ? "Sending..." : "Send Offer"}
               </button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setShowOfferForm(false)}
                 className="cancelBtn"
               >
@@ -459,8 +463,8 @@ export default function ProductMessageBox({
             <input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} style={{ display: 'none' }} />
             📎
           </label>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={sending || (!newMessage.trim() && !imageFile)}
             className="sendButton"
           >

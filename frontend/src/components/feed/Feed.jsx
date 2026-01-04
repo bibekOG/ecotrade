@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import Post from "../post/Post";
 import Share from "../share/Share";
 import "./feed.css";
@@ -11,12 +11,11 @@ export default function Feed({ username }) {
   const [loading, setLoading] = useState(false);
   const { user } = useContext(AuthContext);
 
-  const fetchPosts = async (filter) => {
+  const fetchPosts = useCallback(async (filter) => {
     if (!user) {
-      console.log("No authenticated user, skipping post fetch");
       return;
     }
-    
+
     setLoading(true);
     try {
       let res;
@@ -43,7 +42,7 @@ export default function Feed({ username }) {
             ? await apiClient.get("/posts/profile/" + username)
             : await apiClient.get("/posts/timeline/" + user._id);
       }
-      
+
       const payload = Array.isArray(res?.data) ? res.data : [];
 
       // Preserve server ordering for recommended (already ranked by CF algorithm)
@@ -63,14 +62,14 @@ export default function Feed({ username }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, username]);
 
   useEffect(() => {
     if (!user) {
       // Don't fetch posts if user is not authenticated
       return;
     }
-    
+
     if (username) {
       // If viewing a profile, use the original logic
       const fetchProfilePosts = async () => {
@@ -90,7 +89,7 @@ export default function Feed({ username }) {
       // If on home page, use the filter system
       fetchPosts(activeFilter);
     }
-  }, [username, user, activeFilter]);
+  }, [username, user, activeFilter, fetchPosts]);
 
   const handleFilterChange = (filter) => {
     setActiveFilter(filter);
@@ -109,7 +108,7 @@ export default function Feed({ username }) {
       </div>
     );
   }
-  
+
   // Don't render feed if user is not authenticated
   if (!user) {
     return (
@@ -126,9 +125,9 @@ export default function Feed({ username }) {
   // Home page view - show filtered feed
   return (
     <div className="feed">
-      <div className="feedWrapper">
+      <div className="!w-full">
         <Share />
-        
+
         {/* Filter Tabs */}
         <div className="feedFilters">
           <button
@@ -156,6 +155,9 @@ export default function Feed({ username }) {
             My Posts
           </button>
         </div>
+
+
+
 
         {/* Loading State */}
         {loading && (

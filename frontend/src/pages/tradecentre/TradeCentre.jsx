@@ -2,7 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import apiClient from "../../utils/apiClient";
 import { AuthContext } from "../../context/AuthContext";
 import Layout from "../../components/layout/Layout";
+import Rightbar from "../../components/rightbar/Rightbar";
+import {
+  Storefront,
+  NotificationsActive,
+  ThumbUp,
+  LocalOffer,
+  Search,
+  FilterList,
+  Refresh
+} from "@material-ui/icons";
 import "./tradecentre.css";
+import CreateProductForm from "../marketplace/components/CreateProductForm";
 
 export default function TradeCentre() {
   const { user } = useContext(AuthContext);
@@ -22,6 +33,7 @@ export default function TradeCentre() {
   const [selectedClaim, setSelectedClaim] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [showCreateModal, setShowCreateModal] = useState(false); // New state for Create Modal
 
   useEffect(() => {
     if (user) {
@@ -33,9 +45,9 @@ export default function TradeCentre() {
     try {
       setLoading(true);
       const [
-        productsRes, 
-        userProductsRes, 
-        userOffersRes, 
+        productsRes,
+        userProductsRes,
+        userOffersRes,
         userClaimsRes,
         receivedOffersRes,
         receivedClaimsRes,
@@ -69,7 +81,7 @@ export default function TradeCentre() {
     const actionKey = `${offerId}-${status}`;
     try {
       setActionLoading(prev => ({ ...prev, [actionKey]: true }));
-      
+
       if (status === "Accepted") {
         await apiClient.put(`/products/${productId}/accept-offer/${offerId}`, {
           userId: user._id,
@@ -83,7 +95,7 @@ export default function TradeCentre() {
           responseMessage: responseMessage || "Offer rejected"
         });
       }
-      
+
       alert(`Offer ${status.toLowerCase()} successfully!`);
       setResponseMessage("");
       setShowResponseModal(false);
@@ -100,7 +112,7 @@ export default function TradeCentre() {
     const actionKey = `${claimId}-${status}`;
     try {
       setActionLoading(prev => ({ ...prev, [actionKey]: true }));
-      
+
       if (status === "Accepted") {
         await apiClient.put(`/products/${productId}/accept-claim/${claimId}`, {
           userId: user._id,
@@ -114,7 +126,7 @@ export default function TradeCentre() {
           responseMessage: responseMessage || "Claim rejected"
         });
       }
-      
+
       alert(`Claim ${status.toLowerCase()} successfully!`);
       setResponseMessage("");
       setShowResponseModal(false);
@@ -130,11 +142,11 @@ export default function TradeCentre() {
   const handleCompleteTransaction = async (productId) => {
     try {
       setActionLoading(prev => ({ ...prev, [`complete-${productId}`]: true }));
-      
+
       await apiClient.put(`/products/${productId}/complete-transaction`, {
         userId: user._id
       });
-      
+
       alert("Transaction completed successfully!");
       fetchData(); // Refresh data
     } catch (err) {
@@ -148,12 +160,12 @@ export default function TradeCentre() {
   const handleUpdateProductStatus = async (productId, newStatus) => {
     try {
       setActionLoading(prev => ({ ...prev, [`status-${productId}`]: true }));
-      
+
       await apiClient.put(`/products/${productId}/status`, {
         userId: user._id,
         status: newStatus
       });
-      
+
       alert(`Product status updated to ${newStatus}!`);
       fetchData(); // Refresh data
     } catch (err) {
@@ -192,7 +204,7 @@ export default function TradeCentre() {
       if (!window.confirm("Are you sure you want to delete this product? This action cannot be undone.")) {
         return;
       }
-      
+
       await apiClient.delete(`/products/${productId}`, {
         data: { userId: user._id }
       });
@@ -252,18 +264,18 @@ export default function TradeCentre() {
   const filterProducts = (productsList) => {
     return productsList.filter(product => {
       const matchesSearch = product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.productCategory.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.userId?.username?.toLowerCase().includes(searchTerm.toLowerCase());
-      
+        product.productCategory.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.userId?.username?.toLowerCase().includes(searchTerm.toLowerCase());
+
       const matchesStatus = statusFilter === "all" || product.status === statusFilter;
-      
+
       return matchesSearch && matchesStatus;
     });
   };
 
   const renderProductsTable = (productsList, showActions = false) => {
     const filteredProducts = filterProducts(productsList);
-    
+
     if (filteredProducts.length === 0) {
       return <div className="noData">No products found</div>;
     }
@@ -323,7 +335,7 @@ export default function TradeCentre() {
                 <td>{new Date(product.validTill).toLocaleDateString()}</td>
                 <td>{product.contactDetails}</td>
                 <td>
-                  <span 
+                  <span
                     className="statusBadge"
                     style={{ backgroundColor: getStatusColor(product.status) }}
                   >
@@ -338,24 +350,24 @@ export default function TradeCentre() {
                 {showActions && (
                   <td>
                     <div className="actionButtons">
-                      <button 
+                      <button
                         className="actionBtn edit"
                         onClick={() => handleEditProduct(product)}
                         disabled={product.status !== "Active"}
                       >
                         Edit
                       </button>
-                      <button 
+                      <button
                         className="actionBtn delete"
                         onClick={() => handleDeleteProduct(product._id)}
                         disabled={actionLoading[`delete-${product._id}`]}
                       >
                         {actionLoading[`delete-${product._id}`] ? "Deleting..." : "Delete"}
                       </button>
-                      
+
                       {/* Status Management Buttons */}
                       {product.status === "Booked" && (
-                        <button 
+                        <button
                           className="actionBtn complete"
                           onClick={() => handleCompleteTransaction(product._id)}
                           disabled={actionLoading[`complete-${product._id}`]}
@@ -363,9 +375,9 @@ export default function TradeCentre() {
                           {actionLoading[`complete-${product._id}`] ? "Completing..." : "Mark as Sold"}
                         </button>
                       )}
-                      
+
                       {product.status === "Booked" && (
-                        <button 
+                        <button
                           className="actionBtn reactivate"
                           onClick={() => handleUpdateProductStatus(product._id, "Active")}
                           disabled={actionLoading[`status-${product._id}`]}
@@ -373,9 +385,9 @@ export default function TradeCentre() {
                           {actionLoading[`status-${product._id}`] ? "Updating..." : "Reactivate"}
                         </button>
                       )}
-                      
+
                       {product.status === "Active" && (
-                        <select 
+                        <select
                           className="statusSelect"
                           onChange={(e) => e.target.value && handleUpdateProductStatus(product._id, e.target.value)}
                           defaultValue=""
@@ -418,7 +430,7 @@ export default function TradeCentre() {
             </tr>
           </thead>
           <tbody>
-            {receivedOffers.map(product => 
+            {receivedOffers.map(product =>
               product.offers
                 .filter(offer => offer.userId._id !== user._id)
                 .map(offer => (
@@ -434,10 +446,10 @@ export default function TradeCentre() {
                     </td>
                     <td>
                       <div className="userCell">
-                        <img 
-                          src={offer.userId.profilePicture || "/assets/person/noAvatar.png"} 
-                          alt="" 
-                          className="userImg" 
+                        <img
+                          src={offer.userId.profilePicture || "/assets/person/noAvatar.png"}
+                          alt=""
+                          className="userImg"
                         />
                         <span>{offer.userId?.username || 'Unknown User'}</span>
                       </div>
@@ -476,7 +488,7 @@ export default function TradeCentre() {
                       </div>
                     </td>
                     <td>
-                      <span 
+                      <span
                         className="statusBadge"
                         style={{ backgroundColor: getStatusColor(offer.status) }}
                       >
@@ -496,14 +508,14 @@ export default function TradeCentre() {
                     <td>
                       {offer.status === "Pending" && product.status === "Active" && (
                         <div className="actionButtons">
-                          <button 
+                          <button
                             className="actionBtn accept"
                             onClick={() => openResponseModal(offer)}
                             disabled={actionLoading[`${offer._id}-Accepted`]}
                           >
                             {actionLoading[`${offer._id}-Accepted`] ? "Accepting..." : "Accept"}
                           </button>
-                          <button 
+                          <button
                             className="actionBtn reject"
                             onClick={() => handleOfferAction(product._id, offer._id, "Rejected")}
                             disabled={actionLoading[`${offer._id}-Rejected`]}
@@ -513,7 +525,7 @@ export default function TradeCentre() {
                         </div>
                       )}
                       {offer.status === "Accepted" && product.status === "Booked" && product.currentBuyer?._id === offer.userId._id && (
-                        <button 
+                        <button
                           className="actionBtn complete"
                           onClick={() => handleCompleteTransaction(product._id)}
                           disabled={actionLoading[`complete-${product._id}`]}
@@ -551,7 +563,7 @@ export default function TradeCentre() {
             </tr>
           </thead>
           <tbody>
-            {receivedClaims.map(product => 
+            {receivedClaims.map(product =>
               product.claims
                 .filter(claim => claim.userId._id !== user._id)
                 .map(claim => (
@@ -567,10 +579,10 @@ export default function TradeCentre() {
                     </td>
                     <td>
                       <div className="userCell">
-                        <img 
-                          src={claim.userId.profilePicture || "/assets/person/noAvatar.png"} 
-                          alt="" 
-                          className="userImg" 
+                        <img
+                          src={claim.userId.profilePicture || "/assets/person/noAvatar.png"}
+                          alt=""
+                          className="userImg"
                         />
                         <span>{claim.userId?.username || 'Unknown User'}</span>
                       </div>
@@ -591,7 +603,7 @@ export default function TradeCentre() {
                       </div>
                     </td>
                     <td>
-                      <span 
+                      <span
                         className="statusBadge"
                         style={{ backgroundColor: getStatusColor(claim.status) }}
                       >
@@ -611,14 +623,14 @@ export default function TradeCentre() {
                     <td>
                       {claim.status === "Pending" && product.status === "Active" && (
                         <div className="actionButtons">
-                          <button 
+                          <button
                             className="actionBtn accept"
                             onClick={() => openResponseModal(null, claim)}
                             disabled={actionLoading[`${claim._id}-Accepted`]}
                           >
                             {actionLoading[`${claim._id}-Accepted`] ? "Accepting..." : "Accept"}
                           </button>
-                          <button 
+                          <button
                             className="actionBtn reject"
                             onClick={() => handleClaimAction(product._id, claim._id, "Rejected")}
                             disabled={actionLoading[`${claim._id}-Rejected`]}
@@ -628,7 +640,7 @@ export default function TradeCentre() {
                         </div>
                       )}
                       {claim.status === "Accepted" && product.status === "Booked" && product.currentBuyer?._id === claim.userId._id && (
-                        <button 
+                        <button
                           className="actionBtn complete"
                           onClick={() => handleCompleteTransaction(product._id)}
                           disabled={actionLoading[`complete-${product._id}`]}
@@ -661,8 +673,8 @@ export default function TradeCentre() {
     }
 
     return (
-      <div className="tableContainer">
-        <table className="myOffersTable">
+      <div className="tableContainer overflow-x-auto">
+        <table className="myOffersTable w-full">
           <thead>
             <tr>
               <th>Product</th>
@@ -689,10 +701,10 @@ export default function TradeCentre() {
                 </td>
                 <td>
                   <div className="userCell">
-                    <img 
-                      src={product.userId?.profilePicture || "/assets/person/noAvatar.png"} 
-                      alt="" 
-                      className="userImg" 
+                    <img
+                      src={product.userId?.profilePicture || "/assets/person/noAvatar.png"}
+                      alt=""
+                      className="userImg"
                     />
                     <span>{product.userId?.username || 'Unknown User'}</span>
                   </div>
@@ -731,7 +743,7 @@ export default function TradeCentre() {
                   </div>
                 </td>
                 <td>
-                  <span 
+                  <span
                     className="statusBadge"
                     style={{ backgroundColor: getStatusColor(offer.status) }}
                   >
@@ -751,13 +763,13 @@ export default function TradeCentre() {
                 <td>
                   {offer.status === "Accepted" && product.status === "Booked" && product.currentBuyer?._id === user._id && (
                     <div className="actionButtons">
-                      <button 
+                      <button
                         className="actionBtn contact"
                         onClick={() => window.open(`tel:${product.contactDetails}`, '_blank')}
                       >
                         Contact Seller
                       </button>
-                      <a 
+                      <a
                         href={`/messenger?userId=${product.userId._id}`}
                         className="actionBtn message"
                         style={{ textDecoration: 'none' }}
@@ -822,10 +834,10 @@ export default function TradeCentre() {
                 </td>
                 <td>
                   <div className="userCell">
-                    <img 
-                      src={product.userId?.profilePicture || "/assets/person/noAvatar.png"} 
-                      alt="" 
-                      className="userImg" 
+                    <img
+                      src={product.userId?.profilePicture || "/assets/person/noAvatar.png"}
+                      alt=""
+                      className="userImg"
                     />
                     <span>{product.userId?.username || 'Unknown User'}</span>
                   </div>
@@ -846,7 +858,7 @@ export default function TradeCentre() {
                   </div>
                 </td>
                 <td>
-                  <span 
+                  <span
                     className="statusBadge"
                     style={{ backgroundColor: getStatusColor(claim.status) }}
                   >
@@ -866,13 +878,13 @@ export default function TradeCentre() {
                 <td>
                   {claim.status === "Accepted" && product.status === "Booked" && product.currentBuyer?._id === user._id && (
                     <div className="actionButtons">
-                      <button 
+                      <button
                         className="actionBtn contact"
                         onClick={() => window.open(`tel:${product.contactDetails}`, '_blank')}
                       >
                         Contact Owner
                       </button>
-                      <a 
+                      <a
                         href={`/messenger?userId=${product.userId._id}`}
                         className="actionBtn message"
                         style={{ textDecoration: 'none' }}
@@ -898,13 +910,13 @@ export default function TradeCentre() {
   const renderTransactionsTable = () => {
     const completedTransactions = [
       ...(transactionHistory.userProducts || []).filter(product => product.status === "Sold"),
-      ...(transactionHistory.userOffers || []).filter(product => 
-        product.status === "Sold" && product.offers.some(offer => 
+      ...(transactionHistory.userOffers || []).filter(product =>
+        product.status === "Sold" && product.offers.some(offer =>
           offer.userId._id === user._id && offer.status === "Accepted"
         )
       ),
-      ...(transactionHistory.userClaims || []).filter(product => 
-        product.status === "Sold" && product.claims.some(claim => 
+      ...(transactionHistory.userClaims || []).filter(product =>
+        product.status === "Sold" && product.claims.some(claim =>
           claim.userId._id === user._id && claim.status === "Accepted"
         )
       )
@@ -931,7 +943,7 @@ export default function TradeCentre() {
             {completedTransactions.map(product => {
               const isSeller = product.userId._id === user._id;
               const partner = isSeller ? product.currentBuyer : product.userId;
-              
+
               return (
                 <tr key={product._id}>
                   <td>
@@ -947,10 +959,10 @@ export default function TradeCentre() {
                   </td>
                   <td>
                     <div className="userCell">
-                      <img 
-                        src={partner?.profilePicture || "/assets/person/noAvatar.png"} 
-                        alt="" 
-                        className="userImg" 
+                      <img
+                        src={partner?.profilePicture || "/assets/person/noAvatar.png"}
+                        alt=""
+                        className="userImg"
                       />
                       <span>{partner?.username || 'Unknown Partner'}</span>
                     </div>
@@ -968,7 +980,7 @@ export default function TradeCentre() {
                   </td>
                   <td>{new Date(product.transactionDate).toLocaleDateString()}</td>
                   <td>
-                    <span 
+                    <span
                       className="statusBadge"
                       style={{ backgroundColor: getStatusColor("Sold") }}
                     >
@@ -986,184 +998,270 @@ export default function TradeCentre() {
 
   return (
     <Layout>
-      <div className="tradeCentre">
-        <div className="tradeCentreWrapper">
-          <div className="tradeCentreHeader">
-            <div className="headerTop">
-              <div>
-                <h2>Trade Centre</h2>
-                <p>Manage your marketplace activities</p>
-              </div>
-              <button className="refreshBtn" onClick={handleRefreshData} disabled={loading}>
-                {loading ? "Refreshing..." : "Refresh"}
-              </button>
-            </div>
-            <div className="statsContainer">
-              <div className="statCard">
-                <span className="statNumber">{userProducts.length}</span>
-                <span className="statLabel">My Products</span>
-              </div>
-              <div className="statCard">
-                <span className="statNumber">{getOffersCount()}</span>
-                <span className="statLabel">Offers Received</span>
-              </div>
-              <div className="statCard">
-                <span className="statNumber">{getClaimsCount()}</span>
-                <span className="statLabel">Claims Received</span>
-              </div>
-              <div className="statCard urgent">
-                <span className="statNumber">{getPendingActionsCount()}</span>
-                <span className="statLabel">Pending Actions</span>
-              </div>
-            </div>
-          </div>
+      <div className="flex w-full min-h-[calc(100vh-56px)] bg-[#f0f2f5]">
+        <div className="tradeCentrePageContent">
+          <div className="tradeCentre">
+            <div className="tradeCentreWrapper">
+              <div className="tradeCentreHeader">
+                <div className="headerTop">
+                  <div className="flex !justify-start flex-col">
+                    <h2 className="!text-start">Trade Centre</h2>
+                    <p>Manage all your marketplace activities in one place</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      className="refreshBtn !py-2 !bg-green-600 !text-white !border-green-600 hover:!bg-green-700"
+                      onClick={() => setShowCreateModal(true)}
+                    >
+                      <span className="text-xl mr-1">+</span>
+                      Add Listing
+                    </button>
+                    <button
+                      className="refreshBtn !py-2 !bg-blue-600 !text-white"
+                      onClick={handleRefreshData}
+                      disabled={loading}
+                    >
+                      <Refresh style={{ fontSize: 18, marginRight: 5 }} />
+                      {loading ? "Refreshing..." : "Refresh Data"}
+                    </button>
+                  </div>
+                </div>
 
-          <div className="tradeCentreTabs">
-            <button 
-              className={`tab ${activeTab === "all" ? "active" : ""}`}
-              onClick={() => setActiveTab("all")}
-            >
-              All Products
-            </button>
-            <button 
-              className={`tab ${activeTab === "my" ? "active" : ""}`}
-              onClick={() => setActiveTab("my")}
-            >
-              My Products
-            </button>
-            <button 
-              className={`tab ${activeTab === "offers" ? "active" : ""}`}
-              onClick={() => setActiveTab("offers")}
-            >
-              Offers Received
-              {getOffersCount('Pending') > 0 && (
-                <span className="badge">{getOffersCount('Pending')}</span>
-              )}
-            </button>
-            <button 
-              className={`tab ${activeTab === "claims" ? "active" : ""}`}
-              onClick={() => setActiveTab("claims")}
-            >
-              Claims Received
-              {getClaimsCount('Pending') > 0 && (
-                <span className="badge">{getClaimsCount('Pending')}</span>
-              )}
-            </button>
-            <button 
-              className={`tab ${activeTab === "myOffers" ? "active" : ""}`}
-              onClick={() => setActiveTab("myOffers")}
-            >
-              My Offers
-            </button>
-            <button 
-              className={`tab ${activeTab === "myClaims" ? "active" : ""}`}
-              onClick={() => setActiveTab("myClaims")}
-            >
-              My Claims
-            </button>
-            <button 
-              className={`tab ${activeTab === "transactions" ? "active" : ""}`}
-              onClick={() => setActiveTab("transactions")}
-            >
-              Transactions
-            </button>
-          </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                  {/* Listings Card */}
+                  <div className="stat-card bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-4 md:p-6">
+                    <div className="flex !items-start !justify-start space-x-4">
 
-          {/* Search and Filter Controls */}
-          <div className="controlsContainer">
-            <div className="searchContainer">
-              <input
-                type="text"
-                placeholder="Search products, categories, or users..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="searchInput"
-              />
-            </div>
-            <div className="filterContainer">
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="filterSelect"
-              >
-                <option value="all">All Status</option>
-                <option value="Active">Active</option>
-                <option value="Booked">Booked</option>
-                <option value="Sold">Sold</option>
-                <option value="Removed">Removed</option>
-              </select>
-            </div>
-          </div>
+                      <div className="flex flex-col">
+                        <span className="stat-number text-start text-2xl md:text-3xl font-bold text-gray-800">
+                          {userProducts.length}
+                        </span>
+                        <span className="stat-label text-gray-600 text-sm md:text-base font-medium">
+                          Listings
+                        </span>
+                      </div>
+                    </div>
+                  </div>
 
-          <div className="tradeCentreContent">
-            {loading ? (
-              <div className="loading">Loading...</div>
-            ) : (
-              <>
-                {activeTab === "all" && renderProductsTable(products)}
-                {activeTab === "my" && renderProductsTable(userProducts, true)}
-                {activeTab === "offers" && renderOffersTable()}
-                {activeTab === "claims" && renderClaimsTable()}
-                {activeTab === "myOffers" && renderMyOffersTable()}
-                {activeTab === "myClaims" && renderMyClaimsTable()}
-                {activeTab === "transactions" && renderTransactionsTable()}
-              </>
-            )}
+                  {/* Pending Actions Card */}
+                  <div className={`stat-card rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 md:p-6 ${getPendingActionsCount() > 0
+                    ? 'urgent-card bg-gradient-to-r from-orange-50 to-red-50 border-l-4 border-orange-500 animate-pulse-subtle'
+                    : 'bg-white'
+                    }`}>
+                    <div className="flex items-start space-x-4">
+
+                      <div className="flex flex-col">
+                        <span className={`stat-number text-start text-2xl md:text-3xl font-bold ${getPendingActionsCount() > 0 ? 'text-orange-700' : 'text-gray-800'
+                          }`}>
+                          {getPendingActionsCount()}
+                        </span>
+                        <span className="stat-label text-gray-600 text-sm md:text-base font-medium">
+                          Pending
+                        </span>
+                        {getPendingActionsCount() > 0 && (
+                          <span className="urgent-badge mt-1 text-xs font-semibold text-orange-600 bg-orange-100 px-2 py-1 rounded-full inline-block w-fit">
+                            Action Required
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Accepted Offers Card */}
+                  <div className="stat-card bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-4 md:p-6">
+                    <div className="flex items-start space-x-4">
+
+                      <div className="flex flex-col">
+                        <span className="stat-number text-start text-2xl md:text-3xl font-bold text-gray-800">
+                          {getOffersCount('Accepted')}
+                        </span>
+                        <span className="stat-label text-gray-600 text-sm md:text-base font-medium">
+                          Accepted
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Total Offers Card */}
+                  <div className="stat-card bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-4 md:p-6">
+                    <div className="flex items-start space-x-4">
+
+                      <div className="flex flex-col">
+                        <span className="stat-number text-start text-2xl md:text-3xl font-bold text-gray-800">
+                          {getOffersCount()}
+                        </span>
+                        <span className="stat-label text-gray-600 text-sm md:text-base font-medium">
+                          Total Offers
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Controls Section */}
+              <div className="controlsContainer !flex justify-between !items-center">
+                <div className="searchContainer !mt-5">
+                  <Search className="searchIcon" />
+                  <input
+                    type="text"
+                    placeholder="Search products, categories, or users..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="searchInput"
+                  />
+                </div>
+                <div className="filterContainer">
+                  <FilterList className="filterIcon" />
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="filterSelect"
+                  >
+                    <option value="all">All Statuses</option>
+                    <option value="Active">Active</option>
+                    <option value="Booked">Booked</option>
+                    <option value="Sold">Sold</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="tradeCentreTabs">
+                <button
+                  className={`tab ${activeTab === "all" ? "active" : ""}`}
+                  onClick={() => setActiveTab("all")}
+                >
+                  My Listings
+                </button>
+                <button
+                  className={`tab ${activeTab === "offers" ? "active" : ""}`}
+                  onClick={() => setActiveTab("offers")}
+                >
+                  Received Offers
+                  {getOffersCount('Pending') > 0 && (
+                    <span className="badge">{getOffersCount('Pending')}</span>
+                  )}
+                </button>
+                <button
+                  className={`tab ${activeTab === "claims" ? "active" : ""}`}
+                  onClick={() => setActiveTab("claims")}
+                >
+                  Received Claims
+                  {getClaimsCount('Pending') > 0 && (
+                    <span className="badge">{getClaimsCount('Pending')}</span>
+                  )}
+                </button>
+                <button
+                  className={`tab ${activeTab === "myOffers" ? "active" : ""}`}
+                  onClick={() => setActiveTab("myOffers")}
+                >
+                  Sent Offers
+                </button>
+                <button
+                  className={`tab ${activeTab === "myClaims" ? "active" : ""}`}
+                  onClick={() => setActiveTab("myClaims")}
+                >
+                  Sent Claims
+                </button>
+                {/* <button 
+                  className={`tab ${activeTab === "history" ? "active" : ""}`}
+                  onClick={() => setActiveTab("history")}
+                >
+                  History
+                </button> */}
+              </div>
+
+              <div className="tradeCentreContent">
+                {loading && <div className="loading">Loading...</div>}
+
+                {!loading && (
+                  <>
+                    {activeTab === "all" && renderProductsTable(userProducts, true)}
+                    {activeTab === "offers" && renderOffersTable()}
+                    {activeTab === "claims" && renderClaimsTable()}
+                    {activeTab === "myOffers" && renderMyOffersTable()}
+                    {activeTab === "myClaims" && renderMyClaimsTable()}
+                    {/* {activeTab === "history" && renderTransactionHistory()} */}
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
+        <Rightbar />
+      </div>
 
-        {/* Response Modal */}
-        {showResponseModal && (
-          <div className="modal">
-            <div className="modalContent">
-              <div className="modalHeader">
-                <h3>
-                  {selectedOffer ? 'Accept Offer' : 'Accept Claim'}
-                </h3>
-                <button className="closeBtn" onClick={closeResponseModal}>×</button>
-              </div>
-              <div className="modalBody">
-                <p>
-                  {selectedOffer 
-                                  ? `Accept offer from ${selectedOffer?.userId?.username || 'Unknown User'}?`
-              : `Accept claim from ${selectedClaim?.userId?.username || 'Unknown User'}?`
+      {/* Response Modal */}
+      {showResponseModal && (
+        <div className="modal">
+          <div className="modalContent">
+            <div className="modalHeader">
+              <h3>
+                {selectedOffer ? "Respond to Offer" : "Respond to Claim"}
+              </h3>
+              <button className="closeBtn" onClick={closeResponseModal}>×</button>
+            </div>
+            <div className="modalBody">
+              <p>
+                You are about to accept this {selectedOffer ? "offer" : "claim"}.
+                You can add a message to the buyer/claimer.
+              </p>
+              <textarea
+                className="responseTextarea"
+                placeholder="Ex: 'Your offer is accepted! When can you pick it up?'"
+                value={responseMessage}
+                onChange={(e) => setResponseMessage(e.target.value)}
+              />
+            </div>
+            <div className="modalActions">
+              <button
+                className="actionBtn cancel"
+                onClick={closeResponseModal}
+              >
+                Cancel
+              </button>
+              <button
+                className="actionBtn accept"
+                onClick={() => {
+                  if (selectedOffer) {
+                    handleOfferAction(selectedOffer.productId, selectedOffer._id, "Accepted", selectedOffer.userId._id);
+                  } else if (selectedClaim) {
+                    handleClaimAction(selectedClaim.productId, selectedClaim._id, "Accepted", selectedClaim.userId._id);
                   }
-                </p>
-                <textarea
-                  placeholder="Add a response message (optional)"
-                  value={responseMessage}
-                  onChange={(e) => setResponseMessage(e.target.value)}
-                  className="responseTextarea"
-                />
-              </div>
-              <div className="modalActions">
-                <button 
-                  className="actionBtn accept"
-                  onClick={() => {
-                    if (selectedOffer) {
-                      const product = receivedOffers.find(p => 
-                        p.offers.some(o => o._id === selectedOffer._id)
-                      );
-                      handleOfferAction(product._id, selectedOffer._id, "Accepted", selectedOffer.userId._id);
-                    } else if (selectedClaim) {
-                      const product = receivedClaims.find(p => 
-                        p.claims.some(c => c._id === selectedClaim._id)
-                      );
-                      handleClaimAction(product._id, selectedClaim._id, "Accepted", selectedClaim.userId._id);
-                    }
+                }}
+              >
+                Confirm Accept
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Listing Modal */}
+      {showCreateModal && (
+        <div className="modal">
+          <div className="modalContent !max-w-4xl !w-[95%] !p-0 overflow-hidden">
+            <div className="relative h-full overflow-y-auto max-h-[90vh]">
+              <button
+                className="closeBtn absolute right-4 top-4 z-50 bg-white shadow-md hover:bg-gray-100"
+                onClick={() => setShowCreateModal(false)}
+              >
+                ×
+              </button>
+              <div className="p-4">
+                <CreateProductForm
+                  user={user}
+                  onProductCreated={() => {
+                    fetchData();
+                    setShowCreateModal(false);
                   }}
-                  disabled={actionLoading[`${selectedOffer?._id || selectedClaim?._id}-Accepted`]}
-                >
-                  {actionLoading[`${selectedOffer?._id || selectedClaim?._id}-Accepted`] ? "Accepting..." : "Accept"}
-                </button>
-                <button className="actionBtn cancel" onClick={closeResponseModal}>
-                  Cancel
-                </button>
+                  onCancel={() => setShowCreateModal(false)}
+                />
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </Layout>
   );
 }

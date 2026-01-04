@@ -29,7 +29,7 @@ const ProductActivitySchema = new mongoose.Schema(
       default: {},
     },
   },
-  { 
+  {
     timestamps: true,
     // Compound index for efficient queries
     index: [
@@ -43,7 +43,7 @@ const ProductActivitySchema = new mongoose.Schema(
 // Prevent duplicate activities within a short time window (5 minutes)
 ProductActivitySchema.index(
   { productId: 1, userId: 1, activityType: 1, createdAt: 1 },
-  { 
+  {
     unique: true,
     partialFilterExpression: {
       createdAt: { $gte: new Date(Date.now() - 5 * 60 * 1000) }
@@ -52,7 +52,7 @@ ProductActivitySchema.index(
 );
 
 // Static method to track activity
-ProductActivitySchema.statics.trackActivity = async function(productId, userId, activityType, metadata = {}) {
+ProductActivitySchema.statics.trackActivity = async function (productId, userId, activityType, metadata = {}) {
   try {
     const activity = new this({
       productId,
@@ -60,7 +60,7 @@ ProductActivitySchema.statics.trackActivity = async function(productId, userId, 
       activityType,
       metadata
     });
-    
+
     await activity.save();
     return activity;
   } catch (error) {
@@ -73,7 +73,7 @@ ProductActivitySchema.statics.trackActivity = async function(productId, userId, 
 };
 
 // Static method to get activity counts for a product
-ProductActivitySchema.statics.getProductActivityCounts = async function(productId) {
+ProductActivitySchema.statics.getProductActivityCounts = async function (productId) {
   const pipeline = [
     { $match: { productId: new mongoose.Types.ObjectId(productId) } },
     {
@@ -83,39 +83,39 @@ ProductActivitySchema.statics.getProductActivityCounts = async function(productI
       }
     }
   ];
-  
+
   const results = await this.aggregate(pipeline);
-  
+
   const counts = {
     view: 0,
     click: 0,
     offer: 0
   };
-  
+
   results.forEach(result => {
     counts[result._id] = result.count;
   });
-  
+
   return counts;
 };
 
 // Static method to calculate relevance score
-ProductActivitySchema.statics.calculateRelevanceScore = function(activityCounts, weights = { view: 0.1, click: 0.3, offer: 0.6 }) {
+ProductActivitySchema.statics.calculateRelevanceScore = function (activityCounts, weights = { view: 0.1, click: 0.3, offer: 0.6 }) {
   const { view = 0, click = 0, offer = 0 } = activityCounts;
   const { view: wv, click: wc, offer: wo } = weights;
-  
+
   return (wv * view) + (wc * click) + (wo * offer);
 };
 
 // Static method to get bulk activity counts for multiple products
-ProductActivitySchema.statics.getBulkActivityCounts = async function(productIds) {
+ProductActivitySchema.statics.getBulkActivityCounts = async function (productIds) {
   const pipeline = [
-    { 
-      $match: { 
-        productId: { 
-          $in: productIds.map(id => new mongoose.Types.ObjectId(id)) 
-        } 
-      } 
+    {
+      $match: {
+        productId: {
+          $in: productIds.map(id => new mongoose.Types.ObjectId(id))
+        }
+      }
     },
     {
       $group: {
@@ -138,11 +138,11 @@ ProductActivitySchema.statics.getBulkActivityCounts = async function(productIds)
       }
     }
   ];
-  
+
   const results = await this.aggregate(pipeline);
-  
+
   const activityMap = {};
-  
+
   results.forEach(result => {
     const productId = result._id.toString();
     const counts = {
@@ -150,14 +150,14 @@ ProductActivitySchema.statics.getBulkActivityCounts = async function(productIds)
       click: 0,
       offer: 0
     };
-    
+
     result.activities.forEach(activity => {
       counts[activity.type] = activity.count;
     });
-    
+
     activityMap[productId] = counts;
   });
-  
+
   // Fill in missing products with zero counts
   productIds.forEach(id => {
     const productId = id.toString();
@@ -169,7 +169,7 @@ ProductActivitySchema.statics.getBulkActivityCounts = async function(productIds)
       };
     }
   });
-  
+
   return activityMap;
 };
 

@@ -21,7 +21,7 @@
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts --openssl-legacy-provider build",
-    "postinstall": "node ./scripts/remove-timeago-sourcemaps.js || true",
+    "postinstall": "node ./scripts/silence-timeago.js || true",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -42,5 +42,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.1"
   }
 }

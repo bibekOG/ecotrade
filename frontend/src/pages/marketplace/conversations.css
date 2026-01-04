@@ -1,7 +1,7 @@
 .conversations {
   padding: 20px;
   background: #f0f2f5;
-  min-height: 100vh;
+  min-height: calc(100vh - 56px);
 }
 
 .conversationsWrapper {
@@ -197,6 +197,7 @@
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -228,24 +229,24 @@
   .conversations {
     padding: 10px;
   }
-  
+
   .conversationItem {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
   }
-  
+
   .conversationProduct,
   .conversationUser {
     flex: none;
     width: 100%;
   }
-  
+
   .conversationPreview {
     flex: none;
     width: 100%;
   }
-  
+
   .unreadBadge {
     top: 10px;
     right: 10px;
@@ -256,16 +257,16 @@
   .conversationsHeader h2 {
     font-size: 24px;
   }
-  
+
   .conversationsHeader p {
     font-size: 14px;
   }
-  
+
   .productImage {
     width: 50px;
     height: 50px;
   }
-  
+
   .userAvatar {
     width: 40px;
     height: 40px;

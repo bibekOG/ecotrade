@@ -43,7 +43,7 @@ export default function OffersReceived() {
         buyerId: buyerId,
         responseMessage: "Offer accepted! Please contact me to proceed."
       });
-      
+
       // Refresh the data
       fetchReceivedOffers();
       fetchReceivedClaims();
@@ -59,7 +59,7 @@ export default function OffersReceived() {
         buyerId: buyerId,
         responseMessage: "Claim accepted! Please contact me to proceed."
       });
-      
+
       // Refresh the data
       fetchReceivedOffers();
       fetchReceivedClaims();
@@ -74,7 +74,7 @@ export default function OffersReceived() {
         userId: user._id,
         status: "Rejected"
       });
-      
+
       // Refresh the data
       fetchReceivedOffers();
       fetchReceivedClaims();
@@ -89,7 +89,7 @@ export default function OffersReceived() {
         userId: user._id,
         status: "Rejected"
       });
-      
+
       // Refresh the data
       fetchReceivedOffers();
       fetchReceivedClaims();
@@ -104,7 +104,7 @@ export default function OffersReceived() {
         userId: user._id,
         status: newStatus
       });
-      
+
       // Refresh the data
       fetchReceivedOffers();
       fetchReceivedClaims();
@@ -118,7 +118,7 @@ export default function OffersReceived() {
       await apiClient.put(`/products/${productId}/complete-transaction`, {
         userId: user._id
       });
-      
+
       // Refresh the data
       fetchReceivedOffers();
       fetchReceivedClaims();
@@ -164,13 +164,13 @@ export default function OffersReceived() {
       <div className="offersReceivedHeader">
         <h2>Offers & Claims Received</h2>
         <div className="tabButtons">
-          <button 
+          <button
             className={`tabButton ${activeTab === "offers" ? "active" : ""}`}
             onClick={() => setActiveTab("offers")}
           >
             Offers ({receivedOffers.length})
           </button>
-          <button 
+          <button
             className={`tabButton ${activeTab === "claims" ? "active" : ""}`}
             onClick={() => setActiveTab("claims")}
           >
@@ -201,14 +201,14 @@ export default function OffersReceived() {
                   </tr>
                 </thead>
                 <tbody>
-                  {receivedOffers.map(product => 
+                  {receivedOffers.map(product =>
                     product.offers.map(offer => (
                       <tr key={`${product._id}-${offer._id}`} className="offerRow">
                         <td className="itemCell">
                           <div className="itemInfo">
                             <div className="itemImage">
-                              <img 
-                                src={product.productImages?.[0] || "/assets/post/1.jpeg"} 
+                              <img
+                                src={product.productImages?.[0] || "/assets/post/1.jpeg"}
                                 alt={product.productName}
                                 onError={(e) => {
                                   e.target.src = "/assets/post/1.jpeg";
@@ -219,7 +219,7 @@ export default function OffersReceived() {
                             <div className="itemDetails">
                               <h4>{product.productName}</h4>
                               <p className="itemCategory">{product.productCategory}</p>
-                              <span 
+                              <span
                                 className="itemStatus"
                                 style={{ backgroundColor: getStatusColor(product.status) }}
                               >
@@ -273,8 +273,8 @@ export default function OffersReceived() {
                         </td>
                         <td className="offeredByCell">
                           <div className="userInfo">
-                            <img 
-                              src={offer.userId?.profilePicture || "/assets/person/noAvatar.png"} 
+                            <img
+                              src={offer.userId?.profilePicture ? (offer.userId.profilePicture.startsWith("http") ? offer.userId.profilePicture : process.env.REACT_APP_PUBLIC_FOLDER + offer.userId.profilePicture) : "/assets/person/noAvatar.png"}
                               alt={offer.userId?.username}
                               className="userAvatar"
                               onError={(e) => {
@@ -291,7 +291,7 @@ export default function OffersReceived() {
                         <td className="messageCell">
                           <div className="messageContent">
                             <p className="messageText">{offer.message}</p>
-                            <span 
+                            <span
                               className="offerStatus"
                               style={{ backgroundColor: getOfferStatusColor(offer.status) }}
                             >
@@ -302,14 +302,14 @@ export default function OffersReceived() {
                         <td className="actionsCell">
                           {offer.status === "Pending" && (
                             <div className="actionButtons">
-                              <button 
+                              <button
                                 className="acceptBtn"
                                 onClick={() => handleAcceptOffer(product._id, offer._id, offer.userId._id)}
                                 title="Accept Offer"
                               >
                                 ✓ Accept
                               </button>
-                              <button 
+                              <button
                                 className="rejectBtn"
                                 onClick={() => handleRejectOffer(product._id, offer._id)}
                                 title="Reject Offer"
@@ -364,14 +364,14 @@ export default function OffersReceived() {
                   </tr>
                 </thead>
                 <tbody>
-                  {receivedClaims.map(product => 
+                  {receivedClaims.map(product =>
                     product.claims.map(claim => (
                       <tr key={`${product._id}-${claim._id}`} className="offerRow">
                         <td className="itemCell">
                           <div className="itemInfo">
                             <div className="itemImage">
-                              <img 
-                                src={product.productImages?.[0] || "/assets/post/1.jpeg"} 
+                              <img
+                                src={product.productImages?.[0] || "/assets/post/1.jpeg"}
                                 alt={product.productName}
                                 onError={(e) => {
                                   e.target.src = "/assets/post/1.jpeg";
@@ -382,7 +382,7 @@ export default function OffersReceived() {
                             <div className="itemDetails">
                               <h4>{product.productName}</h4>
                               <p className="itemCategory">{product.productCategory}</p>
-                              <span 
+                              <span
                                 className="itemStatus"
                                 style={{ backgroundColor: getStatusColor(product.status) }}
                               >
@@ -405,8 +405,8 @@ export default function OffersReceived() {
                         </td>
                         <td className="claimedByCell">
                           <div className="userInfo">
-                            <img 
-                              src={claim.userId?.profilePicture || "/assets/person/noAvatar.png"} 
+                            <img
+                              src={claim.userId?.profilePicture ? (claim.userId.profilePicture.startsWith("http") ? claim.userId.profilePicture : process.env.REACT_APP_PUBLIC_FOLDER + claim.userId.profilePicture) : "/assets/person/noAvatar.png"}
                               alt={claim.userId?.username}
                               className="userAvatar"
                               onError={(e) => {
@@ -423,7 +423,7 @@ export default function OffersReceived() {
                         <td className="messageCell">
                           <div className="messageContent">
                             <p className="messageText">{claim.message}</p>
-                            <span 
+                            <span
                               className="claimStatus"
                               style={{ backgroundColor: getOfferStatusColor(claim.status) }}
                             >
@@ -434,14 +434,14 @@ export default function OffersReceived() {
                         <td className="actionsCell">
                           {claim.status === "Pending" && (
                             <div className="actionButtons">
-                              <button 
+                              <button
                                 className="acceptBtn"
                                 onClick={() => handleAcceptClaim(product._id, claim._id, claim.userId._id)}
                                 title="Accept Claim"
                               >
                                 ✓ Accept
                               </button>
-                              <button 
+                              <button
                                 className="rejectBtn"
                                 onClick={() => handleRejectClaim(product._id, claim._id)}
                                 title="Reject Claim"
