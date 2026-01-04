@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import apiClient from "../../../utils/apiClient";
-import { getImageUrl, getImageBaseUrl } from "../../../utils/imageUtils";
+import { getImageUrl, getImageBaseUrl, getProfileImageUrl } from "../../../utils/imageUtils";
+import CategoryPreferences from "../../../utils/categoryPreferences";
 
 const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity, onProductUpdate, onChatOpen }) => {
     const [showDetails, setShowDetails] = useState(false);
@@ -9,17 +10,6 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
     const [editFormData, setEditFormData] = useState(null);
     const [deleting, setDeleting] = useState(false);
     const [editing, setEditing] = useState(false);
-
-    // Track view activity when component mounts
-    useEffect(() => {
-        if (product && user && onTrackActivity) {
-            onTrackActivity(product._id, "view", {
-                productName: product.productName,
-                productFor: product.productFor,
-                timestamp: Date.now()
-            });
-        }
-    }, [product, user, onTrackActivity]);
 
     const handleModalClose = useCallback((e) => {
         e.stopPropagation();
@@ -34,13 +24,19 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
         e.preventDefault();
         e.stopPropagation();
 
-        // Track click activity
+        // Track view activity when user clicks to view details
         if (onTrackActivity) {
-            onTrackActivity(product._id, "click", {
+            onTrackActivity(product._id, "view", {
                 productName: product.productName,
+                productFor: product.productFor,
                 action: "view_details",
                 timestamp: Date.now()
             });
+        }
+
+        // Track category preference for personalization
+        if (product.productCategory) {
+            CategoryPreferences.trackCategoryView(product.productCategory);
         }
 
         setShowDetails(true);
@@ -822,6 +818,30 @@ const ProductCard = React.memo(({ product, user, isHighlighted, onTrackActivity,
                     <div className="!text-start" style={{ fontSize: "13px", color: "#65676b", marginTop: "4px" }}>
                         {product.location}
                     </div>
+                </div>
+
+                {/* View Details Button */}
+                <div className="productCardActions" style={{ padding: "8px 12px", borderTop: "1px solid #e4e6eb" }}>
+                    <button
+                        className="viewDetailsBtn"
+                        onClick={handleViewDetails}
+                        style={{
+                            width: "100%",
+                            padding: "8px 16px",
+                            backgroundColor: "#1877f2",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "6px",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                            transition: "background-color 0.2s"
+                        }}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = "#166fe5"}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = "#1877f2"}
+                    >
+                        👁️ View Details
+                    </button>
                 </div>
             </div>
         </div>

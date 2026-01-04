@@ -6,6 +6,7 @@ import OffersReceived from "../../components/offers/OffersReceived";
 import MyOffers from "../../components/offers/MyOffers";
 import ProductMessageBox from "../../components/marketplace/ProductMessageBox";
 import Conversations from "./Conversations";
+import CategoryPreferences from "../../utils/categoryPreferences";
 import "./marketplace.css";
 
 // Components
@@ -139,6 +140,14 @@ export default function Marketplace() {
 
       if (sortBy) {
         params.append("sortBy", sortBy);
+      }
+
+      // Include preferred categories for personalized sorting
+      if (sortBy === "relevance") {
+        const preferredCats = CategoryPreferences.getPreferencesQueryParam();
+        if (preferredCats) {
+          params.append("preferredCategories", preferredCats);
+        }
       }
 
       if (selectedCategory !== "All") {

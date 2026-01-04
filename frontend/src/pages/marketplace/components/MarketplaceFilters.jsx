@@ -61,6 +61,7 @@ export default function MarketplaceFilters({
                     title="Sort products"
                 >
                     <option value="relevance">🎯 Relevant</option>
+                    <option value="most-viewed">👁️ Most Viewed</option>
                     <option value="newest">🆕 Newest</option>
                     <option value="oldest">⏰ Oldest</option>
                     <option value="name">📝 Name A-Z</option>
@@ -97,8 +98,8 @@ export default function MarketplaceFilters({
                     <button
                         type="button"
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${showRecommendations
-                                ? "bg-orange-100 text-orange-600"
-                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                            ? "bg-orange-100 text-orange-600"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                             }`}
                         onClick={onRecommendationsClick}
                     >
